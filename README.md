@@ -35,6 +35,10 @@ Battle Bounce is a physics-based 2D action fighting game where relies on gun kno
 - Right trigger: Shoot grapple
 - Right trigger (blue character only): Teleport
 
+## Screenshots
+![Title Screen](Assets/Screenshots/TitleScreenScreenshot.png)
+![Landing Site Map](Assets/Screenshots/LandingSiteMapScreenshot.png)
+
 ## Notes
 - This project is a work in progress
 - This project is a controller-only game, keyboard and mouse support is not a planned feature
