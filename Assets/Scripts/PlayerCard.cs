@@ -7,12 +7,14 @@ public class PlayerCard : MonoBehaviour
 {
     public GameObject cursor;
     [SerializeField] private Image characterImage;
+    HandCursor cursorScript;
 
     public bool isCpu = false;
 
     void Update()
     {
-        if (cursor != null)
+        if (cursor == null || cursorScript.PlayerData.IsLocked) return;
+        if (cursor != null && !cursorScript.PlayerData.IsLocked)
         {
             SetCharacterImage();
         }
@@ -33,5 +35,10 @@ public class PlayerCard : MonoBehaviour
         {
             characterImage.gameObject.SetActive(false);
         }
+    }
+
+    public void InitializeHandCursorScript()
+    {
+        cursorScript = cursor.GetComponent<HandCursor>();
     }
 }

@@ -8,6 +8,8 @@ public class GameSetup : ScriptableObject
     public int playerLives;
     public int rulesetTime;
     public int rulesetGamemode;
+
+    public List<PlayerData> playerDatas {get; private set;}
     
     public float time;
     public string gamemode;
@@ -24,5 +26,10 @@ public class GameSetup : ScriptableObject
     {
         time = seconds[rulesetTime];
         gamemode = rulesets[rulesetGamemode];
+    }
+
+    public void GetPlayerData(List<PlayerData> data)
+    {
+        playerDatas = data;
     }
 }

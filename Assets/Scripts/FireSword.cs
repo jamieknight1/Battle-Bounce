@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class FireSword : MonoBehaviour
 {
+    [SerializeField] GameObject fireGuy;
     float swordDamage;
-    GameObject fireGuy;
     void Awake()
     {
-        fireGuy = GameObject.Find("Inferknight");
-        swordDamage = fireGuy.GetComponent<FireGuy>().swordDamage;
+        swordDamage = GetComponentInParent<FireGuy>().swordDamage;
     }
     // [SerializeField] GameObject playerGo;
 

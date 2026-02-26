@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,35 +9,45 @@ public class PlayerData
     public bool IsLocked {get; private set;}
     public PlayerType PlayerType {get; private set;}
     public int PlayerId {get; private set;}
-    public InputDevice PlayerInput {get; private set;}
+    // public PlayerInput PlayerInput {get; private set;}
+    public int DeviceId {get; private set;}
     public GameObject Character {get; private set;}
+    public Sprite PreviewCharacter {get; private set;}
 
-    public void IsCpu(bool isCpu)
+    public PlayerData(int playerId, PlayerType playerType, InputDevice device = null)
     {
-        if (isCpu) {PlayerType = PlayerType.CPU;}
-        if (!isCpu) {PlayerType = PlayerType.Human;}
+        PlayerId = playerId;
+        PlayerType = playerType;
+
+        if (playerType == PlayerType.Human && device != null)
+        {
+            DeviceId = device.deviceId;
+        }
     }
 
-    public void Selected(bool selected)
+    public void Lock()
     {
-        if (selected) {IsLocked = true;}
-        if (!selected) {IsLocked = false;}
+        if (Character == null) return;
+
+        IsLocked = true;
     }
 
-    public void AssignPlayerId(int id)
+    public void Unlock()
     {
-        PlayerId = id;
-    }
-
-    public void AssignInput(InputDevice input)
-    {
-        if (PlayerType == PlayerType.CPU) {return;}
-        else if (PlayerType == PlayerType.Human) {PlayerInput = input;}
+        IsLocked = false;
     }
 
     public void AssignCharacter(GameObject character)
     {
+        if (IsLocked) return;
+
         Character = character;
+        //Debug.Log($"character assigned {character}");
+    }
+
+    public void SetPlayerId(int id)
+    {
+        PlayerId = id;
     }
 }
 
@@ -45,8 +56,3 @@ public enum PlayerType
     Human,
     CPU
 }
-
-//NOTES
-//
-//create a scriptable object for playerdata and reference it in this script
-//look at chatgpt

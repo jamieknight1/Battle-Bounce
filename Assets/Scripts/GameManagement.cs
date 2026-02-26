@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class GameManagement : MonoBehaviour
 {
     [SerializeField] GameSetup gameSetup;
+    private PlayerManager playerManager;
+    [SerializeField] Transform[] playerSpawns;
 
     [Space(10)]
 
@@ -36,9 +38,8 @@ public class GameManagement : MonoBehaviour
     {
         //Destroy(GameObject.Find("Selection Screen Input Manager"));
         playerInputManager = FindFirstObjectByType<PlayerInputManager>();
-
         gameSetup.SetupVars();
-
+        
         pauseMenu.SetActive(false);
 
         startTime = gameSetup.time;
@@ -59,11 +60,23 @@ public class GameManagement : MonoBehaviour
         }
     }
 
+    IEnumerator Start()
+    {
+        yield return null;
+        playerManager = PlayerManager.Instance;
+        SpawnPlayers();
+
+        foreach (var player in playerManager.GetPlayers())
+        {
+            Debug.Log(player.Character.name);
+        }
+    }
+
     void Update()
     {
         if (startTime != 0f) { Timer(); }
 
-        if (playerInputManager.playerCount <= 1 || timerEnded)
+        if (/*GameObject.FindGameObjectsWithTag("Player").Length <= 1 || */timerEnded)
         {
             GameEnded();
         }
@@ -82,9 +95,45 @@ public class GameManagement : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
+    void SpawnPlayers()
+    {
+        var players = gameSetup.playerDatas;
+
+        //Debug.Log("Spawning players: " + players.Count);
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            
+            var playerData = players[i];
+            //Debug.Log($"Player {i} Character: {playerData.Character} Device: ");
+
+            if (playerData.PlayerType == PlayerType.Human)
+            {
+                //Debug.Log("Player " + i + " character is: " + playerData.Character);
+                try
+                {
+                    InputDevice device = InputSystem.devices.FirstOrDefault(d => d.deviceId == playerData.DeviceId);
+                    Debug.Log("player human");
+                    var newPlayer = PlayerInput.Instantiate(playerData.Character, pairWithDevice: device);
+                    newPlayer.transform.position = playerSpawns[i].position;
+                }
+                catch (System.Exception e)
+                {
+                    //Debug.Log($"Spawn Failed {e}");
+                }
+            }
+
+            else
+            {
+                Instantiate(playerData.Character, playerSpawns[i].position, Quaternion.identity);
+                //Debug.Log("player cpu");
+            }    
+        }
+    }
+
     void GameEnded()
     {
-        if (/*playerInputManager.playerCount == 1*/ GameObject.FindGameObjectsWithTag("Player").Length == 1)
+        if (GameObject.FindGameObjectsWithTag("Player").Length == 1)
         {
             winningPlayer = GameObject.FindWithTag("Player");
             for (int i = deadPlayers.Count - 1; i >= 0; i--)
@@ -107,52 +156,9 @@ public class GameManagement : MonoBehaviour
                 playerStats[player] = (playerHealth.lives, playerHealth.currentHealth);
             }
 
-            // int maxLives = int.MinValue;
-            // List<GameObject> potentialWinners = new List<GameObject>();
-
-            // foreach (var player in playerStats)
-            // {
-            //     int lives = player.Value.lives;
-
-            //     if (lives > maxLives)
-            //     {
-            //         maxLives = lives;
-            //         potentialWinners.Clear();
-            //         potentialWinners.Add(player.Key);
-            //     }
-
-            //     else if (lives == maxLives)
-            //     {
-            //         potentialWinners.Add(player.Key);
-            //     }
-            // }
-
-            // winningPlayer = potentialWinners[0];
-
-            // if (potentialWinners.Count > 1)
-            // {
-            //     float maxHealth = playerStats[winningPlayer].health;
-
-            //     foreach (GameObject player in potentialWinners)
-            //     {
-            //         if (playerStats[player].health > maxHealth)
-            //         {
-            //             maxHealth = playerStats[player].health;
-            //             winningPlayer = player;
-            //         }
-            //     }
-            // }
-
             List<GameObject> rankedPlayers = playerStats.OrderByDescending(p => p.Value.lives).ThenByDescending(p => p.Value.health).Select(p => p.Key).ToList();
 
             winningPlayer = rankedPlayers[0];
-
-            // for (int i = 0; i < rankedPlayers.Count; i++)
-            // {
-            //     var stats = playerStats[rankedPlayers[i]];
-            //     //Debug.Log($"{i + 1}: {rankedPlayers[i].name} - Lives: {stats.lives}, Health: {stats.health}");
-            //     //playerRankings.Add(rankedPlayers[i].GetComponent<PlayerInput>().playerIndex);
-            // }
             
             for (int i = 0; i < rankedPlayers.Count; i++)
             {

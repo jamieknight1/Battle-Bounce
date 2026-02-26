@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6a21558c9e395489270774ef3f106b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cpu: 0
   currentHealth: 0
   healthBarPf: {fileID: 517272376637418807, guid: d6dc8b48cc01cf04c9dc4ba39ed30a0c, type: 3}
   playerInputManager: {fileID: 0}
@@ -485,6 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5a74bc60b81eb4da8a46ad9695b56f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireGuy: {fileID: 2850622267297033443}
 --- !u!1 &7523978742139875314
 GameObject:
   m_ObjectHideFlags: 0

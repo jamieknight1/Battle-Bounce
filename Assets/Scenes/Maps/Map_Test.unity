@@ -183,6 +183,26 @@ PrefabInstance:
       propertyPath: timerText
       value: 
       objectReference: {fileID: 1020220800}
+    - target: {fileID: 8223274997847463926, guid: 304a53638b24d9a43813089eafbc9158, type: 3}
+      propertyPath: playerSpawns.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223274997847463926, guid: 304a53638b24d9a43813089eafbc9158, type: 3}
+      propertyPath: playerSpawns.Array.data[0]
+      value: 
+      objectReference: {fileID: 1217824084}
+    - target: {fileID: 8223274997847463926, guid: 304a53638b24d9a43813089eafbc9158, type: 3}
+      propertyPath: playerSpawns.Array.data[1]
+      value: 
+      objectReference: {fileID: 1639488118}
+    - target: {fileID: 8223274997847463926, guid: 304a53638b24d9a43813089eafbc9158, type: 3}
+      propertyPath: playerSpawns.Array.data[2]
+      value: 
+      objectReference: {fileID: 820876400}
+    - target: {fileID: 8223274997847463926, guid: 304a53638b24d9a43813089eafbc9158, type: 3}
+      propertyPath: playerSpawns.Array.data[3]
+      value: 
+      objectReference: {fileID: 449946627}
     - target: {fileID: 8457752221709582725, guid: 304a53638b24d9a43813089eafbc9158, type: 3}
       propertyPath: m_Name
       value: Game Management
@@ -574,6 +594,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inferknight
       objectReference: {fileID: 0}
+    - target: {fileID: 2850622267297033443, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4326482427747581610, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
       propertyPath: maxDistance
       value: 100
@@ -730,6 +754,10 @@ PrefabInstance:
     - target: {fileID: 8645674548836609810, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8645674548836609810, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
