@@ -36,7 +36,6 @@ public class GameManagement : MonoBehaviour
 
     void Awake()
     {
-        //Destroy(GameObject.Find("Selection Screen Input Manager"));
         playerInputManager = FindFirstObjectByType<PlayerInputManager>();
         gameSetup.SetupVars();
         
@@ -76,7 +75,7 @@ public class GameManagement : MonoBehaviour
     {
         if (startTime != 0f) { Timer(); }
 
-        if (/*GameObject.FindGameObjectsWithTag("Player").Length <= 1 || */timerEnded)
+        if (timerEnded)
         {
             GameEnded();
         }
@@ -99,34 +98,23 @@ public class GameManagement : MonoBehaviour
     {
         var players = gameSetup.playerDatas;
 
-        //Debug.Log("Spawning players: " + players.Count);
-
         for (int i = 0; i < players.Count; i++)
         {
             
             var playerData = players[i];
-            //Debug.Log($"Player {i} Character: {playerData.Character} Device: ");
 
             if (playerData.PlayerType == PlayerType.Human)
             {
-                //Debug.Log("Player " + i + " character is: " + playerData.Character);
-                try
-                {
-                    InputDevice device = InputSystem.devices.FirstOrDefault(d => d.deviceId == playerData.DeviceId);
-                    Debug.Log("player human");
-                    var newPlayer = PlayerInput.Instantiate(playerData.Character, pairWithDevice: device);
-                    newPlayer.transform.position = playerSpawns[i].position;
-                }
-                catch (System.Exception e)
-                {
-                    //Debug.Log($"Spawn Failed {e}");
-                }
+                InputDevice device = InputSystem.devices.FirstOrDefault(d => d.deviceId == playerData.DeviceId);
+                Debug.Log("player human");
+                var newPlayer = PlayerInput.Instantiate(playerData.Character, pairWithDevice: device);
+                newPlayer.transform.position = playerSpawns[i].position;
             }
 
             else
             {
-                Instantiate(playerData.Character, playerSpawns[i].position, Quaternion.identity);
-                //Debug.Log("player cpu");
+                var cpuPlayer = Instantiate(playerData.Character, playerSpawns[i].position, Quaternion.identity);
+                cpuPlayer.GetComponent<Health>().cpu = true;
             }    
         }
     }

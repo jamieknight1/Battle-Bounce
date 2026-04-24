@@ -13,8 +13,8 @@ public class PlayerCard : MonoBehaviour
 
     void Update()
     {
-        if (cursor == null || cursorScript.PlayerData.IsLocked) return;
-        if (cursor != null && !cursorScript.PlayerData.IsLocked)
+        if (cursor == null || cursorScript.holdingState == HoldingState.HoldingNothing) return;
+        if (cursor != null && cursorScript.holdingState == HoldingState.HoldingPlayer || (isCpu && cursorScript.holdingState == HoldingState.HoldingCPU))
         {
             SetCharacterImage();
         }
@@ -23,7 +23,7 @@ public class PlayerCard : MonoBehaviour
     private void SetCharacterImage()
     {
         Collider2D target = Physics2D.OverlapPoint(cursor.transform.position, LayerMask.GetMask("PlayerObjects"), -1000f, 1000f);
-        if (target != null)
+        if (target != null && !target.CompareTag("PlayerCard"))
         {
             characterImage.gameObject.SetActive(true);
             SpriteRenderer targetSprite = target.GetComponent<SpriteRenderer>();
@@ -40,5 +40,10 @@ public class PlayerCard : MonoBehaviour
     public void InitializeHandCursorScript()
     {
         cursorScript = cursor.GetComponent<HandCursor>();
+    }
+
+    public void RemoveCursorScript()
+    {
+        cursorScript = null;
     }
 }

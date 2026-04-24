@@ -10,10 +10,11 @@ public class PlayerManager : MonoBehaviour
 {
     private static PlayerManager instance;
     public static PlayerManager Instance {get; private set;}
-    private static List<PlayerData> players = new List<PlayerData>();
+    private List<PlayerData> players = new List<PlayerData>();
     [SerializeField] GameObject cursorPf;
     [SerializeField] Sprite[] cursorIconSprite;
     [SerializeField] PlayerCard[] playerCards;
+    [SerializeField] GameObject cpuCursor;
 
     void Awake()
     {
@@ -25,27 +26,6 @@ public class PlayerManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        Debug.Log($"PlayerManager Instance: {this.GetInstanceID()} PlayerManager Gameobject: {gameObject.name}");
-    }
-
-    void OnEnable()
-    {
-        SceneManager.activeSceneChanged += OnSceneChanged;
-    }
-
-    void OnDisable()
-    {
-        SceneManager.activeSceneChanged -= OnSceneChanged;
-    }
-
-    public void OnSceneChanged(Scene arg0, Scene arg1)
-    {
-        Debug.Log("Scene Changed");
-        foreach (var player in players)
-        {
-            Debug.Log(player.Character.name);
-        }
     }
 
     public void UpdatePlayerId()
@@ -65,15 +45,27 @@ public class PlayerManager : MonoBehaviour
             HandCursor newHandCursorScript = newHandCursor.GetComponent<HandCursor>();
             newHandCursorScript.InitializePlayerData(newPlayerData);
             newHandCursorScript.SetCursorIconImage(cursorIconSprite[players.Count -1]);
+            newHandCursorScript.ChangeHoldingState(HoldingState.HoldingPlayer);
             PlayerCard currentCard = playerCards[players.Count - 1];
             currentCard.cursor = newHandCursor;
             currentCard.InitializeHandCursorScript();
         }
     }
 
-    public void AddCpuPlayer()
+    public void AddCpuPlayer(HandCursor selectingPlayer)
     {
-        if (players.Count < 4) players.Add(new PlayerData(players.Count, PlayerType.CPU));
+        if (players.Count < 4)
+        {
+            Debug.Log("CPU Player Added");
+            players.Add(new PlayerData(players.Count, PlayerType.CPU));
+            var newCursor = Instantiate(cpuCursor, selectingPlayer.transform);
+            var newCursorScript = newCursor.GetComponent<CpuCursor>();
+            newCursorScript.InitializePlayerData(players[players.Count-1]);
+            selectingPlayer.SetCpuCursor(newCursorScript);
+            selectingPlayer.SetCpuCard(playerCards[players.Count -1]);
+
+            Debug.Log(players.Count);
+        }
     }
 
     public void RemovePlayer(PlayerData playerToRemove)
@@ -98,5 +90,10 @@ public class PlayerManager : MonoBehaviour
     public IReadOnlyList<PlayerData> GetPlayers()
     {
         return players;
+    }
+
+    public IReadOnlyList<PlayerCard> GetPlayerCards()
+    {
+        return playerCards;
     }
 }
