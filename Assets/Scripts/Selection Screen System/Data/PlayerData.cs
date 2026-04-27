@@ -13,6 +13,7 @@ public class PlayerData
     public GameObject Character {get; private set;}
     public Sprite PreviewCharacter {get; private set;}
     public PlayerCard PlayerCard{get; private set;}
+    public CpuCursor CpuIcon {get; private set;}
 
     public PlayerData(int playerId, PlayerType playerType, InputDevice device = null)
     {
@@ -47,6 +48,16 @@ public class PlayerData
     public void SetPlayerId(int id)
     {
         PlayerId = id;
+    }
+
+    public void SetPlayerCard(PlayerCard card)
+    {
+        PlayerCard = card;
+    }
+
+    public void SetCpuIcon(CpuCursor icon)
+    {
+        CpuIcon = icon;
     }
 }
 

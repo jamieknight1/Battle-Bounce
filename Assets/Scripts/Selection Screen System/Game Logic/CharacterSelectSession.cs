@@ -10,8 +10,7 @@ public class CharacterSelectSession : MonoBehaviour
     private PlayerManager playerManager;
     private LayerMask playerLayerMask;
     [SerializeField] private GameSetup gameSetup;
-
-    PlayerCard cpuCard;
+    private PlayerCard currentCpuCard;
 
     void Awake()
     {
@@ -45,7 +44,6 @@ public class CharacterSelectSession : MonoBehaviour
         Collider2D target = Physics2D.OverlapPoint(cursor.transform.position, playerLayerMask, -Mathf.Infinity, Mathf.Infinity);
         if (target != null)
         {
-            Debug.Log(target.name);
             if (!cursor.PlayerData.IsLocked && target.CompareTag("Player"))
             {
                 cursor.PlayerData.AssignCharacter(target.gameObject.GetComponent<CharacterSelectButton>().CharacterPrefab);
@@ -54,16 +52,17 @@ public class CharacterSelectSession : MonoBehaviour
                 cursor.ChangeHoldingState(HoldingState.HoldingNothing);
             }
 
-            else if (cursor.PlayerData.IsLocked && target.CompareTag("PlayerCard") && cursor.holdingState == HoldingState.HoldingNothing)
+            else if (cursor.PlayerData.IsLocked && target.CompareTag("PlayerCard") && cursor.holdingState == HoldingState.HoldingNothing && !target.GetComponent<PlayerCard>().isCpu)
             {
-                Debug.Log("PlayerCard Hit!");
                 if (target.GetComponent<PlayerCard>().cursor == null)
                 {
-                    cpuCard = playerManager.GetPlayerCards()[playerManager.GetPlayers().Count];
+                    var cpuCard = target.GetComponent<PlayerCard>();
+                    currentCpuCard = cpuCard;
                     cpuCard.isCpu = true;
-                    cpuCard.cursor = cursor.gameObject;
+                    cpuCard.SwitchSprite();
+                    cpuCard.SetCursor(cursor.gameObject);
                     cpuCard.InitializeHandCursorScript();
-                    playerManager.AddCpuPlayer(cursor);
+                    playerManager.AddCpuPlayer(cursor, cpuCard);
                     cursor.CloseHand();
                     cursor.ChangeHoldingState(HoldingState.HoldingCPU);
                 }
@@ -71,12 +70,18 @@ public class CharacterSelectSession : MonoBehaviour
 
             else if (cursor.holdingState == HoldingState.HoldingCPU && target.CompareTag("Player"))
             {
-                cpuCard.cursor = null;
-                cpuCard.RemoveCursorScript();
+                currentCpuCard.RemoveCursor();
+                currentCpuCard.RemoveCursorScript();
                 cursor.cpuCursorIcon.playerData.AssignCharacter(target.gameObject.GetComponent<CharacterSelectButton>().CharacterPrefab);
                 cursor.cpuCursorIcon.playerData.Lock();
                 cursor.LockCpuCursorIconPosition();
                 cursor.ChangeHoldingState(HoldingState.HoldingNothing);
+                currentCpuCard = null;
+            }
+
+            else if (target.CompareTag("PlayerCard") && target.GetComponent<PlayerCard>().isCpu)
+            {
+                RemovePlayer(target.GetComponent<PlayerCard>());
             }
         }
     }
@@ -91,15 +96,23 @@ public class CharacterSelectSession : MonoBehaviour
 
     void OnCursorCancel(HandCursor cursor)
     {
-        cursor.PlayerData.AssignCharacter(null);
-        cursor.PlayerData.Unlock();
-        cursor.UnlockCursorIconPosition();
-        cursor.ChangeHoldingState(HoldingState.HoldingPlayer);
+        if (cursor.holdingState == HoldingState.HoldingNothing)
+        {   
+            cursor.PlayerData.AssignCharacter(null);
+            cursor.PlayerData.Unlock();
+            cursor.UnlockCursorIconPosition();
+            cursor.ChangeHoldingState(HoldingState.HoldingPlayer);
+        }
     }
 
     void StartGame()
     {
         gameSetup.GetPlayerData(new List<PlayerData>(playerManager.GetPlayers()));
         SceneManager.LoadScene(gameSetup.map);
+    }
+
+    private void RemovePlayer(PlayerCard cpuCard)
+    {
+        playerManager.RemovePlayer(cpuCard.player);
     }
 }

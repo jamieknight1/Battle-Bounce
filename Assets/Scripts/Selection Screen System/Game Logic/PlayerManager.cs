@@ -42,35 +42,46 @@ public class PlayerManager : MonoBehaviour
         {
             PlayerData newPlayerData = new PlayerData(players.Count, PlayerType.Human, device);
             players.Add(newPlayerData);
+            PlayerCard currentCard = GetNextAvailableCard();
+            newPlayerData.SetPlayerCard(currentCard);
             HandCursor newHandCursorScript = newHandCursor.GetComponent<HandCursor>();
             newHandCursorScript.InitializePlayerData(newPlayerData);
             newHandCursorScript.SetCursorIconImage(cursorIconSprite[players.Count -1]);
             newHandCursorScript.ChangeHoldingState(HoldingState.HoldingPlayer);
-            PlayerCard currentCard = playerCards[players.Count - 1];
-            currentCard.cursor = newHandCursor;
+            currentCard.SetCursor(newHandCursor);
             currentCard.InitializeHandCursorScript();
+            currentCard.AddPlayer(newPlayerData);
         }
     }
 
-    public void AddCpuPlayer(HandCursor selectingPlayer)
+    public void AddCpuPlayer(HandCursor selectingPlayer, PlayerCard cpuCard)
     {
         if (players.Count < 4)
         {
-            Debug.Log("CPU Player Added");
-            players.Add(new PlayerData(players.Count, PlayerType.CPU));
+            var newPlayer = new PlayerData(players.Count, PlayerType.CPU);
             var newCursor = Instantiate(cpuCursor, selectingPlayer.transform);
             var newCursorScript = newCursor.GetComponent<CpuCursor>();
-            newCursorScript.InitializePlayerData(players[players.Count-1]);
-            selectingPlayer.SetCpuCursor(newCursorScript);
-            selectingPlayer.SetCpuCard(playerCards[players.Count -1]);
 
-            Debug.Log(players.Count);
+            players.Add(newPlayer);
+            newPlayer.SetPlayerCard(cpuCard);
+            newCursorScript.InitializePlayerData(newPlayer);
+            selectingPlayer.SetCpuCursor(newCursorScript);
+            selectingPlayer.SetCpuCard(cpuCard);
+            cpuCard.AddPlayer(newPlayer);
+            newPlayer.SetCpuIcon(newCursorScript);
         }
     }
 
     public void RemovePlayer(PlayerData playerToRemove)
     {
+        if (playerToRemove == null) {Debug.Log("Player to remove null"); return;}
+
+        Destroy(playerToRemove.CpuIcon.gameObject);
+        var card = playerToRemove.PlayerCard;
         players.Remove(playerToRemove);
+
+        if (card != null) card.RemovePlayer();
+        else Debug.Log("Card to remove null");
     }
 
     public bool CanStartMatch()
@@ -85,6 +96,19 @@ public class PlayerManager : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public PlayerCard GetNextAvailableCard()
+    {
+        foreach (PlayerCard card in playerCards)
+        {
+            if (card.player == null)
+            {
+                return card;
+            }
+        }
+
+        return null;
     }
 
     public IReadOnlyList<PlayerData> GetPlayers()
