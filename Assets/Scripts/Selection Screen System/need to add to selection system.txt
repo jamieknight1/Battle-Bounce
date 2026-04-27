@@ -1,0 +1,42 @@
+need to add to selection system
+    -adding cpu support:
+            -when empty player card pressed, check if player pressing is locked
+            -if not locked return, else spawn a cpu icon on the cursor
+            -when cursor is placed on a character, store the character data in their playerdata class
+        -when scene changes in gamesetup, foreach player that is cpu enum, isCpu in healthScript is turned on
+    
+    -removing players:
+        -for cpu:
+            -if the player card is pressed on an active cpu, it will remove them and delete the cursor if they are not selected
+        -for players:
+            -if the player presses b they will be removed
+
+
+what ive done:
+    -made all playercards gameobjects not ui and gave colliders to work with the cpu system
+    -added an enum state for hand cursor to know what its 
+    -added a cpu cursor script to hold its playerdata
+    
+what i need to do:
+    -set the playercard to the cpu when one is created
+    -once cpu is selected store the character data in the cpu playerdata
+    -removing players
+
+
+when cpu added:
+    -how am i going to change the player card icon
+    -problems:
+        -player card icon changing only works with the player cursor
+    
+    -when a new cpu is created, the player card will have the players cursor assigned.
+    -if the cpu bool is true on player card and cursor holding state is cpu then update the image
+    -when selected, set the player card cursor to null
+
+
+bugs:
+    -if you fill the character select screen with cpus and add a human player, the player will still join when theres no more players allowed.
+        -try adding playerinput module on cpu icon pf
+    -when in a game with only cpus if you are the last one alive it doesnt go to end screen.
+    -players cannot be added to character selection when loading in from map selection screen.
+        -i think because of the old selection screen manager cant work with the new one as there can only be one player input manager component.
+        -removing it wont let you pick a map.

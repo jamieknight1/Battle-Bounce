@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     public void UpdatePlayerId()
@@ -42,7 +42,9 @@ public class PlayerManager : MonoBehaviour
         {
             PlayerData newPlayerData = new PlayerData(players.Count, PlayerType.Human, device);
             players.Add(newPlayerData);
+            Debug.Log($"player count {players.Count}");
             PlayerCard currentCard = GetNextAvailableCard();
+            Debug.Log(currentCard.name);
             newPlayerData.SetPlayerCard(currentCard);
             HandCursor newHandCursorScript = newHandCursor.GetComponent<HandCursor>();
             newHandCursorScript.InitializePlayerData(newPlayerData);
@@ -51,6 +53,8 @@ public class PlayerManager : MonoBehaviour
             currentCard.SetCursor(newHandCursor);
             currentCard.InitializeHandCursorScript();
             currentCard.AddPlayer(newPlayerData);
+
+            Debug.Log("Human Added");
         }
     }
 
@@ -74,14 +78,12 @@ public class PlayerManager : MonoBehaviour
 
     public void RemovePlayer(PlayerData playerToRemove)
     {
-        if (playerToRemove == null) {Debug.Log("Player to remove null"); return;}
+        if (playerToRemove.PlayerType == PlayerType.CPU) Destroy(playerToRemove.CpuIcon.gameObject);
+        else if (playerToRemove.PlayerType == PlayerType.Human) Destroy(playerToRemove.PlayerCard.cursor.gameObject);
 
-        Destroy(playerToRemove.CpuIcon.gameObject);
         var card = playerToRemove.PlayerCard;
         players.Remove(playerToRemove);
-
         if (card != null) card.RemovePlayer();
-        else Debug.Log("Card to remove null");
     }
 
     public bool CanStartMatch()

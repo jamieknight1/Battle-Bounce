@@ -97,11 +97,35 @@ public class CharacterSelectSession : MonoBehaviour
     void OnCursorCancel(HandCursor cursor)
     {
         if (cursor.holdingState == HoldingState.HoldingNothing)
-        {   
+        {
             cursor.PlayerData.AssignCharacter(null);
             cursor.PlayerData.Unlock();
             cursor.UnlockCursorIconPosition();
             cursor.ChangeHoldingState(HoldingState.HoldingPlayer);
+            return;
+        }
+
+        
+        int numberOfHumanPlayers = 0;
+        foreach (var player in playerManager.GetPlayers())
+        {
+            if (player.PlayerType == PlayerType.Human) numberOfHumanPlayers++;
+        }
+
+        Debug.Log($"holding state: {cursor.holdingState}\n human players: {numberOfHumanPlayers} player count: {playerManager.GetPlayers().Count}");
+
+        if (cursor.holdingState == HoldingState.HoldingPlayer && numberOfHumanPlayers == 1)
+        {
+            Debug.Log("Only 1 human player");
+            playerManager.RemovePlayer(cursor.PlayerData);
+            SceneManager.LoadScene("MapSelection");
+        }
+
+        else if (cursor.holdingState == HoldingState.HoldingPlayer && numberOfHumanPlayers > 1)
+        {
+            Debug.Log("More than 1 human player");
+            playerManager.RemovePlayer(cursor.PlayerData);
+
         }
     }
 

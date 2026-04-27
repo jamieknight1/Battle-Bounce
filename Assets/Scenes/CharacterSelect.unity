@@ -223,8 +223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 531413700}
+  cpuCardSprite: {fileID: 21300000, guid: 8b11ffd9eea63ec459bf3280a58fbbb7, type: 3}
+  playerCardSprite: {fileID: 21300000, guid: f0b23ad8bd8c5e141856342f0d99b8b6, type: 3}
   isCpu: 0
 --- !u!222 &74295141
 CanvasRenderer:
@@ -727,8 +728,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 841527033}
+  cpuCardSprite: {fileID: 21300000, guid: 8b11ffd9eea63ec459bf3280a58fbbb7, type: 3}
+  playerCardSprite: {fileID: 21300000, guid: 91855987649d3084e9e077f4ae5ed446, type: 3}
   isCpu: 0
 --- !u!222 &483081840
 CanvasRenderer:
@@ -1051,8 +1053,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 1830665060}
+  cpuCardSprite: {fileID: 21300000, guid: 8b11ffd9eea63ec459bf3280a58fbbb7, type: 3}
+  playerCardSprite: {fileID: 21300000, guid: 418653af4442c9647bf3c95a768aeab6, type: 3}
   isCpu: 0
 --- !u!222 &567403417
 CanvasRenderer:
@@ -1197,8 +1200,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 270972450}
+  cpuCardSprite: {fileID: 0}
+  playerCardSprite: {fileID: 0}
   isCpu: 0
 --- !u!1 &726478455
 GameObject:
@@ -1546,8 +1550,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 1540433865}
+  cpuCardSprite: {fileID: 21300000, guid: 8b11ffd9eea63ec459bf3280a58fbbb7, type: 3}
+  playerCardSprite: {fileID: 21300000, guid: 78b172b5162bbe74a8c3fab6a7da1f41, type: 3}
   isCpu: 0
 --- !u!222 &846120311
 CanvasRenderer:
@@ -1692,8 +1697,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 726478457}
+  cpuCardSprite: {fileID: 0}
+  playerCardSprite: {fileID: 0}
   isCpu: 0
 --- !u!1 &1003327461
 GameObject:
@@ -1926,8 +1932,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 1579554578}
+  cpuCardSprite: {fileID: 0}
+  playerCardSprite: {fileID: 0}
   isCpu: 0
 --- !u!1 &1269590415 stripped
 GameObject:
@@ -2304,8 +2311,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39814540da0596e4f974154c8dad5af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
   characterImage: {fileID: 747344712}
+  cpuCardSprite: {fileID: 0}
+  playerCardSprite: {fileID: 0}
   isCpu: 0
 --- !u!1 &1481173543
 GameObject:

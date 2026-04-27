@@ -6,8 +6,14 @@ using UnityEngine.Playables;
 
 public class LocalInputManager : MonoBehaviour
 {
-    [SerializeField] PlayerManager playerManager;
-    [SerializeField] PlayerInputManager playerInputManager;
+    PlayerManager playerManager;
+    PlayerInputManager playerInputManager;
+
+    void Awake()
+    {
+        playerManager = PlayerManager.Instance;
+        playerInputManager = GetComponent<PlayerInputManager>();
+    }
 
     void OnEnable()
     {
@@ -25,7 +31,7 @@ public class LocalInputManager : MonoBehaviour
     {
         // if (playerManager.GetPlayers().Count >= 4) playerInputManager.DisableJoining(); Destroy(playerInput.gameObject);
 
-        if (playerManager.GetPlayers().Count < 4) playerManager.AddHumanPlayer(playerInput.devices[0], playerInput.gameObject);
+        if (playerManager.GetPlayers().Count < 4) playerManager.AddHumanPlayer(playerInput.devices[0], playerInput.gameObject); Debug.Log("Player Joined");
     }
 
     void OnPlayerLeft(PlayerInput playerInput)

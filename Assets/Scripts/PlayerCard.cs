@@ -16,12 +16,15 @@ public class PlayerCard : MonoBehaviour
 
     void Update()
     {
-        if (cursor == null || cursorScript.holdingState == HoldingState.HoldingNothing) Debug.Log($"playercard name: {gameObject.name} cursor name when null: {cursor.name}");
+        if (cursor == null) Debug.Log($"{name} cursor null");
+        if (player == null) Debug.Log ($"{name} player null");
+
+        if (cursor == null || cursorScript.holdingState == HoldingState.HoldingNothing) return;
         if (cursor != null && (cursorScript.holdingState == HoldingState.HoldingPlayer || (isCpu && cursorScript.holdingState == HoldingState.HoldingCPU)))
         {
-            Debug.Log($"name: {gameObject.name} cursor: {cursor.name}");
             SetCharacterImage();
         }
+
     }
 
     private void SetCharacterImage()
