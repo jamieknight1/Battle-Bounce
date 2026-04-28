@@ -10,6 +10,7 @@ public class CharacterSelectSession : MonoBehaviour
     private PlayerManager playerManager;
     private LayerMask playerLayerMask;
     [SerializeField] private GameSetup gameSetup;
+    private PlayerCard currentCpuCard;
 
     void Awake()
     {
@@ -41,11 +42,47 @@ public class CharacterSelectSession : MonoBehaviour
     void OnCursorSelect(HandCursor cursor)
     {
         Collider2D target = Physics2D.OverlapPoint(cursor.transform.position, playerLayerMask, -Mathf.Infinity, Mathf.Infinity);
-        if (target != null && !cursor.PlayerData.IsLocked)
+        if (target != null)
         {
-            cursor.PlayerData.AssignCharacter(target.gameObject.GetComponent<CharacterSelectButton>().CharacterPrefab);
-            cursor.PlayerData.Lock();
-            cursor.LockCursorIconPosition();
+            if (!cursor.PlayerData.IsLocked && target.CompareTag("Player"))
+            {
+                cursor.PlayerData.AssignCharacter(target.gameObject.GetComponent<CharacterSelectButton>().CharacterPrefab);
+                cursor.PlayerData.Lock();
+                cursor.LockCursorIconPosition();
+                cursor.ChangeHoldingState(HoldingState.HoldingNothing);
+            }
+
+            else if (cursor.PlayerData.IsLocked && target.CompareTag("PlayerCard") && cursor.holdingState == HoldingState.HoldingNothing && !target.GetComponent<PlayerCard>().isCpu)
+            {
+                if (target.GetComponent<PlayerCard>().cursor == null)
+                {
+                    var cpuCard = target.GetComponent<PlayerCard>();
+                    currentCpuCard = cpuCard;
+                    cpuCard.isCpu = true;
+                    cpuCard.SwitchSprite();
+                    cpuCard.SetCursor(cursor.gameObject);
+                    cpuCard.InitializeHandCursorScript();
+                    playerManager.AddCpuPlayer(cursor, cpuCard);
+                    cursor.CloseHand();
+                    cursor.ChangeHoldingState(HoldingState.HoldingCPU);
+                }
+            }
+
+            else if (cursor.holdingState == HoldingState.HoldingCPU && target.CompareTag("Player"))
+            {
+                currentCpuCard.RemoveCursor();
+                currentCpuCard.RemoveCursorScript();
+                cursor.cpuCursorIcon.playerData.AssignCharacter(target.gameObject.GetComponent<CharacterSelectButton>().CharacterPrefab);
+                cursor.cpuCursorIcon.playerData.Lock();
+                cursor.LockCpuCursorIconPosition();
+                cursor.ChangeHoldingState(HoldingState.HoldingNothing);
+                currentCpuCard = null;
+            }
+
+            else if (target.CompareTag("PlayerCard") && target.GetComponent<PlayerCard>().isCpu)
+            {
+                RemovePlayer(target.GetComponent<PlayerCard>());
+            }
         }
     }
 
@@ -59,15 +96,43 @@ public class CharacterSelectSession : MonoBehaviour
 
     void OnCursorCancel(HandCursor cursor)
     {
-        cursor.PlayerData.AssignCharacter(null);
-        cursor.PlayerData.Unlock();
-        cursor.UnlockCursorIconPosition();
+        if (cursor.holdingState == HoldingState.HoldingNothing)
+        {
+            cursor.PlayerData.AssignCharacter(null);
+            cursor.PlayerData.Unlock();
+            cursor.UnlockCursorIconPosition();
+            cursor.ChangeHoldingState(HoldingState.HoldingPlayer);
+            return;
+        }
+
+        
+        int numberOfHumanPlayers = 0;
+        foreach (var player in playerManager.GetPlayers())
+        {
+            if (player.PlayerType == PlayerType.Human) numberOfHumanPlayers++;
+        }
+
+        if (cursor.holdingState == HoldingState.HoldingPlayer && numberOfHumanPlayers == 1)
+        {
+            playerManager.RemovePlayer(cursor.PlayerData);
+            SceneManager.LoadScene("MapSelection");
+        }
+
+        else if (cursor.holdingState == HoldingState.HoldingPlayer && numberOfHumanPlayers > 1)
+        {
+            playerManager.RemovePlayer(cursor.PlayerData);
+
+        }
     }
 
     void StartGame()
     {
         gameSetup.GetPlayerData(new List<PlayerData>(playerManager.GetPlayers()));
-        //Debug.Log($"player count before starting game: {playerManager.GetPlayers().Count}");
         SceneManager.LoadScene(gameSetup.map);
+    }
+
+    private void RemovePlayer(PlayerCard cpuCard)
+    {
+        playerManager.RemovePlayer(cpuCard.player);
     }
 }

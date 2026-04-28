@@ -9,10 +9,11 @@ public class PlayerData
     public bool IsLocked {get; private set;}
     public PlayerType PlayerType {get; private set;}
     public int PlayerId {get; private set;}
-    // public PlayerInput PlayerInput {get; private set;}
     public int DeviceId {get; private set;}
     public GameObject Character {get; private set;}
     public Sprite PreviewCharacter {get; private set;}
+    public PlayerCard PlayerCard{get; private set;}
+    public CpuCursor CpuIcon {get; private set;}
 
     public PlayerData(int playerId, PlayerType playerType, InputDevice device = null)
     {
@@ -42,12 +43,21 @@ public class PlayerData
         if (IsLocked) return;
 
         Character = character;
-        //Debug.Log($"character assigned {character}");
     }
 
     public void SetPlayerId(int id)
     {
         PlayerId = id;
+    }
+
+    public void SetPlayerCard(PlayerCard card)
+    {
+        PlayerCard = card;
+    }
+
+    public void SetCpuIcon(CpuCursor icon)
+    {
+        CpuIcon = icon;
     }
 }
 

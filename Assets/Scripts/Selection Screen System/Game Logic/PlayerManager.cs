@@ -10,10 +10,11 @@ public class PlayerManager : MonoBehaviour
 {
     private static PlayerManager instance;
     public static PlayerManager Instance {get; private set;}
-    private static List<PlayerData> players = new List<PlayerData>();
+    private List<PlayerData> players = new List<PlayerData>();
     [SerializeField] GameObject cursorPf;
     [SerializeField] Sprite[] cursorIconSprite;
     [SerializeField] PlayerCard[] playerCards;
+    [SerializeField] GameObject cpuCursor;
 
     void Awake()
     {
@@ -24,28 +25,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        Debug.Log($"PlayerManager Instance: {this.GetInstanceID()} PlayerManager Gameobject: {gameObject.name}");
-    }
-
-    void OnEnable()
-    {
-        SceneManager.activeSceneChanged += OnSceneChanged;
-    }
-
-    void OnDisable()
-    {
-        SceneManager.activeSceneChanged -= OnSceneChanged;
-    }
-
-    public void OnSceneChanged(Scene arg0, Scene arg1)
-    {
-        Debug.Log("Scene Changed");
-        foreach (var player in players)
-        {
-            Debug.Log(player.Character.name);
-        }
+        //DontDestroyOnLoad(gameObject);
     }
 
     public void UpdatePlayerId()
@@ -62,23 +42,44 @@ public class PlayerManager : MonoBehaviour
         {
             PlayerData newPlayerData = new PlayerData(players.Count, PlayerType.Human, device);
             players.Add(newPlayerData);
+            PlayerCard currentCard = GetNextAvailableCard();
+            newPlayerData.SetPlayerCard(currentCard);
             HandCursor newHandCursorScript = newHandCursor.GetComponent<HandCursor>();
             newHandCursorScript.InitializePlayerData(newPlayerData);
             newHandCursorScript.SetCursorIconImage(cursorIconSprite[players.Count -1]);
-            PlayerCard currentCard = playerCards[players.Count - 1];
-            currentCard.cursor = newHandCursor;
+            newHandCursorScript.ChangeHoldingState(HoldingState.HoldingPlayer);
+            currentCard.SetCursor(newHandCursor);
             currentCard.InitializeHandCursorScript();
+            currentCard.AddPlayer(newPlayerData);
         }
     }
 
-    public void AddCpuPlayer()
+    public void AddCpuPlayer(HandCursor selectingPlayer, PlayerCard cpuCard)
     {
-        if (players.Count < 4) players.Add(new PlayerData(players.Count, PlayerType.CPU));
+        if (players.Count < 4)
+        {
+            var newPlayer = new PlayerData(players.Count, PlayerType.CPU);
+            var newCursor = Instantiate(cpuCursor, selectingPlayer.transform);
+            var newCursorScript = newCursor.GetComponent<CpuCursor>();
+
+            players.Add(newPlayer);
+            newPlayer.SetPlayerCard(cpuCard);
+            newCursorScript.InitializePlayerData(newPlayer);
+            selectingPlayer.SetCpuCursor(newCursorScript);
+            selectingPlayer.SetCpuCard(cpuCard);
+            cpuCard.AddPlayer(newPlayer);
+            newPlayer.SetCpuIcon(newCursorScript);
+        }
     }
 
     public void RemovePlayer(PlayerData playerToRemove)
     {
+        if (playerToRemove.PlayerType == PlayerType.CPU) Destroy(playerToRemove.CpuIcon.gameObject);
+        else if (playerToRemove.PlayerType == PlayerType.Human) Destroy(playerToRemove.PlayerCard.cursor.gameObject);
+
+        var card = playerToRemove.PlayerCard;
         players.Remove(playerToRemove);
+        if (card != null) card.RemovePlayer();
     }
 
     public bool CanStartMatch()
@@ -95,8 +96,26 @@ public class PlayerManager : MonoBehaviour
         return true;
     }
 
+    public PlayerCard GetNextAvailableCard()
+    {
+        foreach (PlayerCard card in playerCards)
+        {
+            if (card.player == null)
+            {
+                return card;
+            }
+        }
+
+        return null;
+    }
+
     public IReadOnlyList<PlayerData> GetPlayers()
     {
         return players;
+    }
+
+    public IReadOnlyList<PlayerCard> GetPlayerCards()
+    {
+        return playerCards;
     }
 }

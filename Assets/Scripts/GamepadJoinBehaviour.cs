@@ -85,7 +85,7 @@ public class GamepadJoinBehavior : MonoBehaviour
             // This creates the PlayerInput component.
             // In Unity's new input system, the creation of this component is what defines the existence of the "player"
             PlayerInput theCursor = PlayerInput.Instantiate(playerCursor, -1, controlScheme, -1, device);
-            playerCard.GetComponent<PlayerCard>().cursor = theCursor.gameObject;
+            //playerCard.GetComponent<PlayerCard>().cursor = theCursor.gameObject;
             theCursor.transform.parent = currentCanvas.transform;
             theCursor.transform.localScale = new Vector3(1f, 1f, 1f);
             playerCard.SetActive(true);

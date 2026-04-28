@@ -22,6 +22,14 @@ public class HandCursor : MonoBehaviour
     public event Action<HandCursor> CancelPressed;
 
     [SerializeField] private GameObject cursorIcon;
+    public CpuCursor cpuCursorIcon {get; private set;}
+
+    private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite closedHand;
+    [SerializeField] private Sprite openedHand;
+
+    public HoldingState holdingState {get; private set;}
+    public PlayerCard CpuCard {get; private set;}
 
     void OnEnable()
     {
@@ -61,6 +69,7 @@ public class HandCursor : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         characterSelectSession = FindObjectOfType<CharacterSelectSession>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -92,7 +101,6 @@ public class HandCursor : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {   
             SelectPressed?.Invoke(this);
-            Debug.Log("select pressed");
         }
     }
 
@@ -101,7 +109,6 @@ public class HandCursor : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             StartPressed?.Invoke(this);
-            Debug.Log("start pressed");
         }
     }
 
@@ -110,7 +117,6 @@ public class HandCursor : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             CancelPressed?.Invoke(this);
-            Debug.Log("Cancel pressed");
         }
     }
 
@@ -122,12 +128,20 @@ public class HandCursor : MonoBehaviour
     public void LockCursorIconPosition()
     {
         cursorIcon.transform.SetParent(null);
+        OpenHand();
+    }
+
+    public void LockCpuCursorIconPosition()
+    {
+        cpuCursorIcon.transform.SetParent(null);
+        OpenHand();
     }
 
     public void UnlockCursorIconPosition()
     {
         cursorIcon.transform.SetParent(transform);
         cursorIcon.transform.localPosition = Vector2.zero;
+        CloseHand();
     }
 
     public void SetCursorIconImage(Sprite sprite)
@@ -135,4 +149,46 @@ public class HandCursor : MonoBehaviour
         SpriteRenderer cursorIconSprite = cursorIcon.GetComponent<SpriteRenderer>();
         cursorIconSprite.sprite = sprite;
     }
+
+    public void OpenHand()
+    {
+        spriteRenderer.sprite = openedHand;
+    }
+
+    public void CloseHand()
+    {
+        spriteRenderer.sprite = closedHand;
+    }
+
+    public void SetCpuCursor(CpuCursor cursor)
+    {
+        cpuCursorIcon = cursor;
+    }
+
+    public void RemoveCpuCursor()
+    {
+        cpuCursorIcon = null;
+    }
+
+    public void SetCpuCard(PlayerCard card)
+    {
+        CpuCard = card;
+    }
+
+    public void RemoveCpuCard()
+    {
+        CpuCard = null;
+    }
+
+    public void ChangeHoldingState(HoldingState state)
+    {
+        holdingState = state;
+    }
+}
+
+public enum HoldingState
+{
+    HoldingPlayer,
+    HoldingCPU,
+    HoldingNothing
 }

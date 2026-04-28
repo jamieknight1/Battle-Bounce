@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e1afb6994af68d43b0e9533b4177547, type: 3}
   m_Name: GameSetup
   m_EditorClassIdentifier: 
-  playerLives: 1
+  playerLives: 3
   rulesetTime: 5
   rulesetGamemode: 0
   time: 600
