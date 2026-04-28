@@ -42,9 +42,7 @@ public class PlayerManager : MonoBehaviour
         {
             PlayerData newPlayerData = new PlayerData(players.Count, PlayerType.Human, device);
             players.Add(newPlayerData);
-            Debug.Log($"player count {players.Count}");
             PlayerCard currentCard = GetNextAvailableCard();
-            Debug.Log(currentCard.name);
             newPlayerData.SetPlayerCard(currentCard);
             HandCursor newHandCursorScript = newHandCursor.GetComponent<HandCursor>();
             newHandCursorScript.InitializePlayerData(newPlayerData);
@@ -53,8 +51,6 @@ public class PlayerManager : MonoBehaviour
             currentCard.SetCursor(newHandCursor);
             currentCard.InitializeHandCursorScript();
             currentCard.AddPlayer(newPlayerData);
-
-            Debug.Log("Human Added");
         }
     }
 

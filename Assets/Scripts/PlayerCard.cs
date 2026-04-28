@@ -16,9 +16,6 @@ public class PlayerCard : MonoBehaviour
 
     void Update()
     {
-        if (cursor == null) Debug.Log($"{name} cursor null");
-        if (player == null) Debug.Log ($"{name} player null");
-
         if (cursor == null || cursorScript.holdingState == HoldingState.HoldingNothing) return;
         if (cursor != null && (cursorScript.holdingState == HoldingState.HoldingPlayer || (isCpu && cursorScript.holdingState == HoldingState.HoldingCPU)))
         {

@@ -31,7 +31,7 @@ public class LocalInputManager : MonoBehaviour
     {
         // if (playerManager.GetPlayers().Count >= 4) playerInputManager.DisableJoining(); Destroy(playerInput.gameObject);
 
-        if (playerManager.GetPlayers().Count < 4) playerManager.AddHumanPlayer(playerInput.devices[0], playerInput.gameObject); Debug.Log("Player Joined");
+        if (playerManager.GetPlayers().Count < 4) playerManager.AddHumanPlayer(playerInput.devices[0], playerInput.gameObject);
     }
 
     void OnPlayerLeft(PlayerInput playerInput)
