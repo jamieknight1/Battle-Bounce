@@ -75,7 +75,7 @@ public class GameManagement : MonoBehaviour
     {
         if (startTime != 0f) { Timer(); }
 
-        if (timerEnded)
+        if (timerEnded || GameObject.FindGameObjectsWithTag("Player").Length == 1)
         {
             GameEnded();
         }
