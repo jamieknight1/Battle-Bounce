@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 5305607559733072858}
   - component: {fileID: 2313896178693095918}
   - component: {fileID: -165588441614084883}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Toxicide
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -409,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6a21558c9e395489270774ef3f106b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cpu: 0
   currentHealth: 0
   healthBarPf: {fileID: 517272376637418807, guid: d6dc8b48cc01cf04c9dc4ba39ed30a0c, type: 3}
   playerInputManager: {fileID: 0}

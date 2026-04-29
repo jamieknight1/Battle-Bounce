@@ -53,6 +53,7 @@ public class FireGuy : MonoBehaviour
     [SerializeField] float swordForce;
     [SerializeField] Collider2D swordCollider;
     [SerializeField] public float swordDamage = 10f;
+    [SerializeField] private ParticleSystem flameTrail;
 
     [SerializeField] GameManagement gameManagement;
 
@@ -116,6 +117,7 @@ public class FireGuy : MonoBehaviour
 
                 if (Vector2.Distance(transform.position, target) < 1.2f || grappleCollided == true)
                 {
+                    flameTrail.Stop();
                     retracting = false;
                     //line.enabled = false;
                     grappleCollided = false;
@@ -125,8 +127,6 @@ public class FireGuy : MonoBehaviour
                     swordTransform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                     swordTransform.localPosition = new Vector2(46.5f, 0f);
                 }
-
-                SpawnFlameTrail();
             }
 
             if (player.FindAction("Fire").ReadValue<float>() > 0f && Time.time >= nextTimeToFire)
@@ -152,7 +152,7 @@ public class FireGuy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (retracting && other.gameObject.tag != "Ground")
+        if (retracting && other.gameObject.tag == "Ground")
         {
             grappleCollided = true;
         }
@@ -191,6 +191,8 @@ public class FireGuy : MonoBehaviour
     {
         if (player.FindAction("MoveGun").ReadValue<Vector2>().x > 0) { yield return StartCoroutine(RotateSword(0.5f, -360.0f)); }
         else if (player.FindAction("MoveGun").ReadValue<Vector2>().x < 0) { yield return StartCoroutine(RotateSword(0.5f, 360.0f)); }
+
+        flameTrail.Play();
 
         swordCollider.enabled = true;
 
@@ -235,14 +237,24 @@ public class FireGuy : MonoBehaviour
 
     void SpawnFlameTrail()
     {
-        if (Time.time >= nextTimeToSpawnFlameTrail)
+        if (retracting)
         {
-            nextTimeToSpawnFlameTrail = Time.time + flameTrailCooldown;
-            GameObject flameTrail = Instantiate(flameTrailPf);
-            Destroy(flameTrail, 5f);
-            flameTrail.transform.position = transform.position;
-            BoxCollider2D flameTrailCollider = flameTrail.GetComponent<BoxCollider2D>();
-            Physics2D.IgnoreCollision(flameTrailCollider, GetComponent<Collider2D>());
+            flameTrail.Play();
         }
+
+        if (!retracting)
+        {
+            //flameTrail.Stop();
+        }
+
+        // if (Time.time >= nextTimeToSpawnFlameTrail)
+        // {
+        //     nextTimeToSpawnFlameTrail = Time.time + flameTrailCooldown;
+        //     GameObject flameTrail = Instantiate(flameTrailPf);
+        //     Destroy(flameTrail, 5f);
+        //     flameTrail.transform.position = transform.position;
+        //     BoxCollider2D flameTrailCollider = flameTrail.GetComponent<BoxCollider2D>();
+        //     Physics2D.IgnoreCollision(flameTrailCollider, GetComponent<Collider2D>());
+        // }
     }
 }

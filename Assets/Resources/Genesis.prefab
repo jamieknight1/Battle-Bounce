@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 9030659919061754115}
   - component: {fileID: 9007367897569790649}
   - component: {fileID: 5245532234943108625}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Genesis
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -528,6 +528,7 @@ MonoBehaviour:
   maxPupilMovement: 0.15
   iris: {fileID: 3460214704804086558}
   pupil: {fileID: 6867869372416706401}
+  gameManagement: {fileID: 0}
 --- !u!114 &5245532234943108625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,6 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6a21558c9e395489270774ef3f106b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cpu: 0
   currentHealth: 0
   healthBarPf: {fileID: 517272376637418807, guid: d6dc8b48cc01cf04c9dc4ba39ed30a0c, type: 3}
   playerInputManager: {fileID: 0}
