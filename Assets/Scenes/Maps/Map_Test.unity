@@ -220,10 +220,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2268452829549505405, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
+      propertyPath: cpu
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2850622267297033443, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
       propertyPath: m_Name
       value: Inferknight
       objectReference: {fileID: 0}
+    - target: {fileID: 4326482427747581610, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
+      propertyPath: aiScript
+      value: 
+      objectReference: {fileID: 648226277}
+    - target: {fileID: 4326482427747581610, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
+      propertyPath: healthScript
+      value: 
+      objectReference: {fileID: 648226272}
     - target: {fileID: 6964992304522962974, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -291,7 +303,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2850622267297033443, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 648226277}
   m_SourcePrefab: {fileID: 100100000, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
 --- !u!1 &254735572
 GameObject:
@@ -663,6 +678,40 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+--- !u!1 &648226268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2850622267297033443, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
+  m_PrefabInstance: {fileID: 124617409}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &648226272 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2268452829549505405, guid: 7430fc916e63f07479333c827cd233cb, type: 3}
+  m_PrefabInstance: {fileID: 124617409}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648226268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6a21558c9e395489270774ef3f106b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &648226277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648226268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18e162a19eda2b488311eb3a26bc74a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootAtPlayerRange: 5
+  bulletDetectRange: 5
+  chanceToLaunchSelf: 100
+  firePressed: 0
+  shootGrapplePressed: 0
+  aimGun: {x: 0, y: 0}
 --- !u!114 &734794833 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8223274997847463926, guid: 304a53638b24d9a43813089eafbc9158, type: 3}
@@ -1354,6 +1403,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6504840942886748617, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
+      propertyPath: cpu
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2616789989489569174, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1397,6 +1450,22 @@ PrefabInstance:
     - target: {fileID: 2616789989489569174, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241421982423863769, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
+      propertyPath: bulletDetectRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241421982423863769, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
+      propertyPath: chanceToLaunchSelf
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241421982423863769, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
+      propertyPath: shootAtPlayerRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241421982423863769, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
+      propertyPath: shootGrappleChance
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8645674548836609810, guid: 5af12b64fce3f91419ec7ddf2383b526, type: 3}
       propertyPath: m_Name

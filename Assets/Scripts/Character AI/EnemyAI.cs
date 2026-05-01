@@ -69,42 +69,43 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (singlePlayer != null)
+        //DODGING BULLETS AND PLAYER
+
+        // if bullets are close, try to dodge otherwise, shoot at the bullets
+        if (activeNearbyBullets.Count > 0)
         {
-            //DODGING BULLETS AND PLAYER
+            GameObject closestBullet = null;
 
-            // if bullets are close, try to dodge otherwise, shoot at the bullets
-            if (activeNearbyBullets.Count > 0)
+            for (int i = 0; i < activeNearbyBullets.Count; i++)
             {
-                GameObject closestBullet = null;
-
-                for (int i = 0; i < activeNearbyBullets.Count; i++)
+                if (closestBullet == null)
                 {
-                    if (closestBullet == null)
-                    {
-                        closestBullet = activeNearbyBullets[i];
-                    }
-
-                    else if (Vector2.Distance(transform.position, activeNearbyBullets[i].transform.position) < Vector2.Distance(transform.position, closestBullet.transform.position))
-                    {
-                        closestBullet = activeNearbyBullets[i];
-                    }
+                    closestBullet = activeNearbyBullets[i];
                 }
 
-                Dodge();
-
-                if (!grappleShot && wallToShootAt.magnitude == 0) { ShootAtSinglePlayer(closestBullet.transform.position); }
+                else if (Vector2.Distance(transform.position, activeNearbyBullets[i].transform.position) < Vector2.Distance(transform.position, closestBullet.transform.position))
+                {
+                    closestBullet = activeNearbyBullets[i];
+                }
             }
 
-            // randomly launches themself
+            Dodge();
+
+            if (!grappleShot && wallToShootAt.magnitude == 0) { ShootAtSinglePlayer(closestBullet.transform.position); }
+        }
+
+        // randomly launches themself
+        
+        else if (randomChanceToLaunchSelf == 1 && Time.time >= playerScript.nextTimeToFire)
+        {
+            ShootAtSinglePlayer(wallToShootAt);
+        }
+
+        else if (singlePlayer != null)
+        {
             
-            else if (randomChanceToLaunchSelf == 1 && Time.time >= playerScript.nextTimeToFire)
-            {
-                ShootAtSinglePlayer(wallToShootAt);
-            }
-
             // if the player is too close, get out their way
-            else if (Vector2.Distance(transform.position, singlePlayer.transform.position) < shootAtPlayerRange) { Dodge(); }
+            if (Vector2.Distance(transform.position, singlePlayer.transform.position) < shootAtPlayerRange) { Dodge(); }
 
             // If player is far enough away, shoot at them
             else if (Vector2.Distance(transform.position, singlePlayer.transform.position) > shootAtPlayerRange && Time.time >= playerScript.nextTimeToFire) { ShootAtSinglePlayer(singlePlayer.transform.position); }
@@ -118,7 +119,26 @@ public class EnemyAI : MonoBehaviour
 
         else if (singlePlayer == null)
         {
+            GameObject closestPlayer = null;
+            foreach (var player in activePlayers)
+            {
+                if (closestPlayer == null) { closestPlayer = player; }
+
+                else if (Vector2.Distance(transform.position, player.transform.position) < Vector2.Distance(transform.position, closestPlayer.transform.position)) { closestPlayer = player; }
+
+                if (Vector2.Distance(transform.position, player.transform.position) < shootAtPlayerRange) { Dodge(); }
+
+                else if (Vector2.Distance(transform.position, player.transform.position) > shootAtPlayerRange && Time.time >= playerScript.nextTimeToFire) { ShootAtSinglePlayer(player.transform.position); }
+            }
+
+            // If player is far enough away, shoot at them
             
+
+            if (!grappleShot)
+            {
+                int chance = UnityEngine.Random.Range(1, shootGrappleChance + 1); 
+                if (chance == 1) { ShootGrappleMultiPlayer(closestPlayer); }
+            }
         }
     }
 
@@ -197,6 +217,13 @@ public class EnemyAI : MonoBehaviour
     {
         
     }
+
+    private void ShootGrappleMultiPlayer(GameObject player)
+    {
+        aimGrapple = Quaternion.Euler(0f, 0f, 90f) * (player.transform.position - transform.position);
+        shootGrapplePressed = true;
+        grappleShot = true;
+    } 
 
     // GIZMOS
     private void OnDrawGizmos()

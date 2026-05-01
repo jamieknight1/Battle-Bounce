@@ -22,7 +22,7 @@ public class FireGuy : MonoBehaviour
     Quaternion grappleRotation;
 
     [SerializeField] LayerMask grapplableMask;
-    [SerializeField] float maxDistance = 10f;
+    [SerializeField] public float maxDistance = 10f;
     [SerializeField] float grappleSpeed = 10f;
     [SerializeField] float grappleShootSpeed = 20f;
     [SerializeField] Rigidbody2D playerRb;
@@ -34,14 +34,14 @@ public class FireGuy : MonoBehaviour
     bool grappleCollided = false;
 
     public float grappleCooldown;
-    float nextTimeToGrapple = 0f;
+    public float nextTimeToGrapple {get; private set;}
 
     Vector3 target;
 
     public Transform shootPoint;
     public GameObject Bullet;
     public float fireRate = 1f;
-    float nextTimeToFire = 0f;
+    public float nextTimeToFire {get; private set;}
 
     [SerializeField] GameObject flameTrailPf;
     float nextTimeToSpawnFlameTrail = 0f;
@@ -57,6 +57,12 @@ public class FireGuy : MonoBehaviour
 
     [SerializeField] GameManagement gameManagement;
 
+    [SerializeField] Health healthScript;
+    [SerializeField] InferknightAI aiScript;
+    [HideInInspector] public bool firePressed;
+    [HideInInspector] public bool shootGrapplePressed;
+    [HideInInspector] public Vector2 aimGun;
+
     void Awake()
     {
         playerInputManager = FindObjectOfType<PlayerInputManager>();
@@ -69,6 +75,9 @@ public class FireGuy : MonoBehaviour
         swordCollider.enabled = false;
 
         gameManagement = GameObject.FindObjectOfType<GameManagement>();
+
+        nextTimeToFire = 0.5f;
+        nextTimeToGrapple = 0.5f;
     }
 
     private void Start()
@@ -100,11 +109,25 @@ public class FireGuy : MonoBehaviour
 
     void Update()
     {
+        if (!healthScript.cpu)
+        {
+            firePressed = player.FindAction("Fire").ReadValue<float>() > 0f;
+            shootGrapplePressed = player.FindAction("Grapple").ReadValue<float>() > 0f;
+            aimGun = player.FindAction("MoveGun").ReadValue<Vector2>();
+        }
+
+        else if (healthScript.cpu)
+        {
+            firePressed = aiScript.firePressed;
+            shootGrapplePressed = aiScript.shootGrapplePressed;
+            aimGun = aiScript.aimGun;
+        }
+
         if (!gameManagement.paused)
         {
-            if (player.FindAction("Grapple").ReadValue<float>() > 0f && Time.time >= nextTimeToGrapple)
+            if (shootGrapplePressed && Time.time >= nextTimeToFire)
             {
-                nextTimeToGrapple = Time.time + grappleCooldown;
+                nextTimeToFire = Time.time + grappleCooldown;
                 StartGrapple();
             }
 
@@ -129,7 +152,7 @@ public class FireGuy : MonoBehaviour
                 }
             }
 
-            if (player.FindAction("Fire").ReadValue<float>() > 0f && Time.time >= nextTimeToFire)
+            if (firePressed && Time.time >= nextTimeToFire)
             {
                 nextTimeToFire = Time.time + fireRate;
                 GameObject bullet;
@@ -142,11 +165,11 @@ public class FireGuy : MonoBehaviour
 
                 if (swordCollided == true) { playerRb.AddForce((transform.position - swordTransform.position) * swordForce); swordCollided = false; }
 
-                if (player.FindAction("MoveGun").ReadValue<Vector2>().x > 0) { StartCoroutine(RotateSword(0.5f, -360.0f)); }
-                if (player.FindAction("MoveGun").ReadValue<Vector2>().x < 0) { StartCoroutine(RotateSword(0.5f, 360.0f)); }
+                if (aimGun.x > 0) { StartCoroutine(RotateSword(0.5f, -360.0f)); }
+                if (aimGun.x < 0) { StartCoroutine(RotateSword(0.5f, 360.0f)); }
             }
 
-            Rotate(player.FindAction("MoveGun").ReadValue<Vector2>(), gunHolder);
+            Rotate(aimGun, gunHolder);
         }
     }
 
@@ -166,6 +189,11 @@ public class FireGuy : MonoBehaviour
         {
             Health playerHealth = other.gameObject.GetComponent<Health>();
             playerHealth.TakeDamage(swordDamage);
+        }
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(other.gameObject);
         }
     }
 
@@ -189,8 +217,8 @@ public class FireGuy : MonoBehaviour
 
     IEnumerator Grapple()
     {
-        if (player.FindAction("MoveGun").ReadValue<Vector2>().x > 0) { yield return StartCoroutine(RotateSword(0.5f, -360.0f)); }
-        else if (player.FindAction("MoveGun").ReadValue<Vector2>().x < 0) { yield return StartCoroutine(RotateSword(0.5f, 360.0f)); }
+        if (aimGun.x > 0) { yield return StartCoroutine(RotateSword(0.5f, -360.0f)); }
+        else if (aimGun.x < 0) { yield return StartCoroutine(RotateSword(0.5f, 360.0f)); }
 
         flameTrail.Play();
 
