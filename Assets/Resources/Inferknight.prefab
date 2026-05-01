@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4326482427747581610}
   - component: {fileID: 895325720895682480}
   - component: {fileID: 1106951238552674721}
+  - component: {fileID: 8203124985246133232}
   m_Layer: 7
   m_Name: Inferknight
   m_TagString: Player
@@ -211,6 +212,11 @@ MonoBehaviour:
   swordDamage: 10
   flameTrail: {fileID: 7280210666101917851}
   gameManagement: {fileID: 0}
+  healthScript: {fileID: 0}
+  aiScript: {fileID: 0}
+  firePressed: 0
+  shootGrapplePressed: 0
+  aimGun: {x: 0, y: 0}
 --- !u!114 &895325720895682480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +351,24 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &8203124985246133232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2850622267297033443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18e162a19eda2b488311eb3a26bc74a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootAtPlayerRange: 5
+  bulletDetectRange: 5
+  chanceToLaunchSelf: 100
+  firePressed: 0
+  shootGrapplePressed: 0
+  aimGun: {x: 0, y: 0}
 --- !u!1 &3796649868913092770
 GameObject:
   m_ObjectHideFlags: 0

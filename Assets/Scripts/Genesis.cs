@@ -26,14 +26,14 @@ public class Genesis : MonoBehaviour
     [HideInInspector] public bool retracting = false;
     bool grappleCollided = false;
     public float grappleCooldown;
-    float nextTimeToGrapple = 0f;
+    public float nextTimeToGrapple = 0.12f;
     Vector3 target;
     [SerializeField] float grappleSpeed = 10f;
     [SerializeField] float grappleShootSpeed = 20f;
     LineRenderer line;
     Vector2 grappleDirection;
-    [SerializeField] LayerMask grapplableMask;
-    [SerializeField] float maxDistance = 10f;
+    [SerializeField] public LayerMask grapplableMask;
+    [SerializeField] public float maxDistance = 10f;
     [SerializeField] GameObject tail;
     [SerializeField] Transform tailEnd;
     private Vector3 tailInitialLocalPos;
@@ -41,7 +41,7 @@ public class Genesis : MonoBehaviour
     public Transform shootPoint;
     public GameObject Bullet;
     public float fireRate = 1f;
-    float nextTimeToFire = 0f;
+    public float nextTimeToFire = 0.18f;
 
     [SerializeField] float maxIrisMovement = 1f;
     [SerializeField] float maxPupilMovement = 0.1f;
@@ -53,6 +53,13 @@ public class Genesis : MonoBehaviour
     Animator eyeAnimator;
 
     [SerializeField] GameManagement gameManagement;
+
+    [HideInInspector] public bool firePressed;
+    [HideInInspector] public bool shootGrapplePressed;
+    [HideInInspector] public Vector2 aimGun;
+    [HideInInspector] public Vector2 aimGrapple;
+
+    [SerializeField] Health healthScript;
 
     void Awake()
     {
@@ -99,9 +106,27 @@ public class Genesis : MonoBehaviour
 
     void Update()
     {
+        if (!healthScript.cpu)
+        {
+            firePressed = player.FindAction("Fire").ReadValue<float>() > 0f;
+            shootGrapplePressed = player.FindAction("Grapple").ReadValue<float>() > 0f;
+            aimGrapple = player.FindAction("MoveGrapple").ReadValue<Vector2>();
+            aimGun = player.FindAction("MoveGun").ReadValue<Vector2>();
+        }
+
+        else if (healthScript.cpu)
+        {
+            GenesisAI aiScript = GetComponent<GenesisAI>();
+            
+            firePressed = aiScript.firePressed;
+            shootGrapplePressed = aiScript.shootGrapplePressed;
+            aimGrapple = aiScript.aimGrapple;
+            aimGun = aiScript.aimGun;
+        }
+
         if (!gameManagement.paused)
         {
-            if (player.FindAction("Grapple").ReadValue<float>() > 0f && Time.time >= nextTimeToGrapple)
+            if (shootGrapplePressed && Time.time >= nextTimeToGrapple)
             {
                 nextTimeToGrapple = Time.time + grappleCooldown;
                 if (tail.transform.localPosition == tailInitialLocalPos) { StartCoroutine(Animation("OnGrapple", 0.12f, tailAnimator, StartGrapple)); }
@@ -128,7 +153,7 @@ public class Genesis : MonoBehaviour
                 }
             }
 
-            if (player.FindAction("Fire").ReadValue<float>() > 0f && Time.time >= nextTimeToFire)
+            if (firePressed && Time.time >= nextTimeToFire)
             {
                 nextTimeToFire = Time.time + fireRate;
                 StartCoroutine(Animation("OnShoot", 0.18f, eyeAnimator, Shoot));
@@ -136,7 +161,7 @@ public class Genesis : MonoBehaviour
 
             if (canRotate)
             {
-                Rotate(-player.FindAction("MoveGrapple").ReadValue<Vector2>(), grappleHolder);
+                Rotate(-aimGrapple, grappleHolder);
             }
             MoveEye(iris, maxIrisMovement);
             MoveEye(pupil, maxPupilMovement);
@@ -205,13 +230,13 @@ public class Genesis : MonoBehaviour
 
     void MoveEye(GameObject eye, float maxEyeMovement)
     {   
-        if (player.FindAction("MoveGun").ReadValue<Vector2>().magnitude == 0)
+        if (aimGun.magnitude == 0)
         {
             eye.transform.position = transform.position;
         }
         else
         {
-            move = Vector2.ClampMagnitude(player.FindAction("MoveGun").ReadValue<Vector2>(), maxEyeMovement);
+            move = Vector2.ClampMagnitude(aimGun, maxEyeMovement);
             eye.transform.position = transform.position + move;
         }
     }
@@ -225,7 +250,7 @@ public class Genesis : MonoBehaviour
 
     void Shoot()
     {
-        if (player.FindAction("MoveGun").ReadValue<Vector2>().magnitude !=0)
+        if (aimGun.magnitude !=0)
         {
             GameObject bullet;
             bullet = Instantiate(Bullet, shootPoint.position, shootPoint.rotation);
@@ -233,8 +258,8 @@ public class Genesis : MonoBehaviour
             Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
             bulletScript.player = this.gameObject;
             float bulletSpeed = bulletScript.speed;
-            bulletRb.velocity = player.FindAction("MoveGun").ReadValue<Vector2>().normalized * bulletSpeed;
-            Rotate(-player.FindAction("MoveGun").ReadValue<Vector2>(), bullet.transform);
+            bulletRb.velocity = aimGun.normalized * bulletSpeed;
+            Rotate(-aimGun, bullet.transform);
 
             
         }

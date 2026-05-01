@@ -53,6 +53,8 @@ public class InferknightAI : MonoBehaviour
             }
         }
 
+        else if (activePlayers.Count == 1) { closestPlayer = activePlayers[0]; }
+
         //Finding nearby bullets
         foreach (GameObject bullet in GameObject.FindGameObjectsWithTag("Bullet"))
         {
