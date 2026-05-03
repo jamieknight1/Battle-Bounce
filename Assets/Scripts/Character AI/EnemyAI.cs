@@ -61,13 +61,17 @@ public class EnemyAI : MonoBehaviour
         }
 
         // constantly looping through the nearby bullets list and removing if they dont exist or arent nearby
-        foreach (GameObject bullet in activeNearbyBullets)
-        {
-            if (bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange)
-            {
-                activeNearbyBullets.Remove(bullet);
-            }
-        }
+        // foreach (GameObject bullet in activeNearbyBullets)
+        // {
+        //     if (bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange)
+        //     {
+        //         activeNearbyBullets.Remove(bullet);
+        //     }
+        // }
+
+        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
+
+        activePlayers.RemoveAll(player => player == null);
 
         //DODGING BULLETS AND PLAYER
 
@@ -122,13 +126,16 @@ public class EnemyAI : MonoBehaviour
             GameObject closestPlayer = null;
             foreach (var player in activePlayers)
             {
-                if (closestPlayer == null) { closestPlayer = player; }
+                if (player != null)
+                {
+                    if (closestPlayer == null) { closestPlayer = player; }
 
-                else if (Vector2.Distance(transform.position, player.transform.position) < Vector2.Distance(transform.position, closestPlayer.transform.position)) { closestPlayer = player; }
+                    else if (Vector2.Distance(transform.position, player.transform.position) < Vector2.Distance(transform.position, closestPlayer.transform.position)) { closestPlayer = player; }
 
-                if (Vector2.Distance(transform.position, player.transform.position) < shootAtPlayerRange) { Dodge(); }
+                    if (Vector2.Distance(transform.position, player.transform.position) < shootAtPlayerRange) { Dodge(); }
 
-                else if (Vector2.Distance(transform.position, player.transform.position) > shootAtPlayerRange && Time.time >= playerScript.nextTimeToFire) { ShootAtSinglePlayer(player.transform.position); }
+                    else if (Vector2.Distance(transform.position, player.transform.position) > shootAtPlayerRange && Time.time >= playerScript.nextTimeToFire) { ShootAtSinglePlayer(player.transform.position); }
+                }
             }
 
             // If player is far enough away, shoot at them

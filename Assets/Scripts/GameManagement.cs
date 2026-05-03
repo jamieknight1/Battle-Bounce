@@ -158,11 +158,7 @@ public class GameManagement : MonoBehaviour
                 playerRankings.Add(deadPlayers[i]);
             }
         }
-
-        for (int i = 0; i < playerRankings.Count; i++)
-        {
-            Debug.Log(playerRankings[i]);
-        }
+        
         winningPlayerNumber = winningPlayer.GetComponent<PlayerInput>().playerIndex;
         gameSetup.winningPlayerNumber = winningPlayerNumber + 1;
         gameSetup.playerRankings = playerRankings;

@@ -17,10 +17,6 @@ public class GreenGuy : MonoBehaviour
     public string playerNumber;
     public PlayerInputManager playerInputManager;
 
-
-    LineRenderer line;
-    Vector2 grappleDirection;
-
     [SerializeField] LayerMask grapplableMask;
     [SerializeField] float maxDistance = 10f;
     [SerializeField] float grappleSpeed = 10f;
@@ -36,8 +32,6 @@ public class GreenGuy : MonoBehaviour
     public float grappleCooldown;
     float nextTimeToGrapple = 0f;
 
-    Vector3 target;
-
     public Transform gasShootPoint;
     public Transform sludgeShootPoint;
     public GameObject gasCloudBullet;
@@ -47,20 +41,21 @@ public class GreenGuy : MonoBehaviour
 
     [SerializeField] GameManagement gameManagement;
 
+    [SerializeField] Health healthScript;
+    [HideInInspector] public bool firePressed;
+    [HideInInspector] public bool shootGrapplePressed;
+    [HideInInspector] public Vector2 aimGun;
+    [HideInInspector] public Vector2 aimGrapple;
+
     void Awake()
     {
         playerInputManager = FindObjectOfType<PlayerInputManager>();
         playerNumber = playerInputManager.playerCount.ToString();
-        inputAsset = this.GetComponent<PlayerInput>().actions;
+        inputAsset = GetComponent<PlayerInput>().actions;
         player = inputAsset.FindActionMap("PlayerMovement");
         playerControls = new PlayerControls();
 
-        gameManagement = GameObject.FindObjectOfType<GameManagement>();
-    }
-
-    private void Start()
-    {
-        line = GetComponent<LineRenderer>();
+        gameManagement = FindObjectOfType<GameManagement>();
     }
 
     void OnEnable()
@@ -89,31 +84,49 @@ public class GreenGuy : MonoBehaviour
 
     void Update()
     {
+        if (!healthScript.cpu)
+        {
+            firePressed = player.FindAction("Fire").ReadValue<float>() > 0f;
+            shootGrapplePressed = player.FindAction("Grapple").ReadValue<float>() > 0f;
+            aimGrapple = player.FindAction("MoveGrapple").ReadValue<Vector2>();
+            aimGun = player.FindAction("MoveGun").ReadValue<Vector2>();
+        }
+
+        else if (healthScript.cpu)
+        {
+            ToxicideAI aiScript = GetComponent<ToxicideAI>();
+            
+            firePressed = aiScript.firePressed;
+            shootGrapplePressed = aiScript.shootGrapplePressed;
+            aimGrapple = aiScript.aimGrapple;
+            aimGun = aiScript.aimGun;
+        }
+
         if (!gameManagement.paused)
         {
-            if (player.FindAction("Grapple").ReadValue<float>() > 0f && Time.time >= nextTimeToGrapple)
+            if (shootGrapplePressed && Time.time >= nextTimeToGrapple)
             {
                 nextTimeToGrapple = Time.time + grappleCooldown;
-                Shoot(gasCloudBullet, gasShootPoint, nextTimeToGrapple, gasShootPoint.right);
+                Shoot(gasCloudBullet, gasShootPoint, gasShootPoint.right);
             }
 
-            if (player.FindAction("Fire").ReadValue<float>() > 0f && Time.time >= nextTimeToFire)
+            if (firePressed && Time.time >= nextTimeToFire)
             {
                 nextTimeToFire = Time.time + fireRate;
-                Shoot(sludgeBombBullet, sludgeShootPoint, nextTimeToFire, -sludgeShootPoint.right);
+                Shoot(sludgeBombBullet, sludgeShootPoint, -sludgeShootPoint.right);
             }
 
-            Rotate(-player.FindAction("MoveGun").ReadValue<Vector2>(), gunHolder);
-            Rotate(player.FindAction("MoveGrapple").ReadValue<Vector2>(), grappleHolder);
+            Rotate(-aimGun, gunHolder);
+            Rotate(aimGrapple, grappleHolder);
         }
     }
 
-    private void Shoot(GameObject Bullet, Transform shootPoint, float nextTimeToShoot, Vector2 shootDirection)
+    private void Shoot(GameObject Bullet, Transform shootPoint, Vector2 shootDirection)
     {
         GameObject bullet;
         bullet = Instantiate(Bullet, shootPoint.position, shootPoint.rotation);
         Bullet bulletScript = bullet.GetComponent<Bullet>();
-        bulletScript.player = this.gameObject;
+        bulletScript.player = gameObject;
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
         float bulletSpeed = bullet.GetComponentInParent<Bullet>().speed;
         bulletRb.velocity = shootDirection * bulletSpeed;

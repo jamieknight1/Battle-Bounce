@@ -187,7 +187,6 @@ public class ToBeNamed : MonoBehaviour
         {
             target = hit.point;
             grappleShot = true;
-            Debug.Log(target);
             StartCoroutine(Grappling());
         }
 
@@ -228,7 +227,6 @@ public class ToBeNamed : MonoBehaviour
         grappleShootPoint.SetParent(grapple);
         grappleShootPoint.localRotation = Quaternion.Euler(0f,0f,0f);
         grappleShootPoint.localPosition = new Vector2(-8.5f,0f);
-        Debug.Log(grappleShootPoint.position);
     }
 
     // public void TakeDamage(float damage)

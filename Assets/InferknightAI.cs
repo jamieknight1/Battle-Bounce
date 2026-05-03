@@ -48,8 +48,11 @@ public class InferknightAI : MonoBehaviour
         {
             foreach (var player in activePlayers)
             {
-                if (closestPlayer == null) { closestPlayer = player; }
-                else if (Vector2.Distance(transform.position, player.transform.position) < Vector2.Distance(transform.position, closestPlayer.transform.position)) { closestPlayer = player; }
+                if (player != null)
+                {
+                    if (closestPlayer == null) { closestPlayer = player; }
+                    else if (Vector2.Distance(transform.position, player.transform.position) < Vector2.Distance(transform.position, closestPlayer.transform.position)) { closestPlayer = player; }
+                }
             }
         }
 
@@ -65,13 +68,17 @@ public class InferknightAI : MonoBehaviour
         }
 
         //Clearing any bullets that arent in range
-        foreach (GameObject bullet in activeNearbyBullets)
-        {
-            if (bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange)
-            {
-                activeNearbyBullets.Remove(bullet);
-            }
-        }
+        // foreach (GameObject bullet in activeNearbyBullets)
+        // {
+        //     if (bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange)
+        //     {
+        //         activeNearbyBullets.Remove(bullet);
+        //     }
+        // }
+
+        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
+
+        activePlayers.RemoveAll(player => player == null);
 
         //Finding the closest bullet
         if (activeNearbyBullets.Count > 0)
