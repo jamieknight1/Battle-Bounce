@@ -212,8 +212,8 @@ MonoBehaviour:
   swordDamage: 10
   flameTrail: {fileID: 7280210666101917851}
   gameManagement: {fileID: 0}
-  healthScript: {fileID: 0}
-  aiScript: {fileID: 0}
+  healthScript: {fileID: 2268452829549505405}
+  aiScript: {fileID: 8203124985246133232}
   firePressed: 0
   shootGrapplePressed: 0
   aimGun: {x: 0, y: 0}

@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 9030659919061754115}
   - component: {fileID: 9007367897569790649}
   - component: {fileID: 5245532234943108625}
+  - component: {fileID: 6938327446870327369}
   m_Layer: 7
   m_Name: Genesis
   m_TagString: Player
@@ -513,6 +514,7 @@ MonoBehaviour:
   grappleHolder: {fileID: 2920373176607056432}
   retracting: 0
   grappleCooldown: 1.5
+  nextTimeToGrapple: 0.12
   grappleSpeed: 50
   grappleShootSpeed: 100
   grapplableMask:
@@ -524,11 +526,17 @@ MonoBehaviour:
   shootPoint: {fileID: 5800571622780417913}
   Bullet: {fileID: 7708831906735200125, guid: 049ffca2d026cce4b8a930098cdf2a57, type: 3}
   fireRate: 1
+  nextTimeToFire: 0.18
   maxIrisMovement: 0.1
   maxPupilMovement: 0.15
   iris: {fileID: 3460214704804086558}
   pupil: {fileID: 6867869372416706401}
   gameManagement: {fileID: 0}
+  firePressed: 0
+  shootGrapplePressed: 0
+  aimGun: {x: 0, y: 0}
+  aimGrapple: {x: 0, y: 0}
+  healthScript: {fileID: 5245532234943108625}
 --- !u!114 &5245532234943108625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +555,25 @@ MonoBehaviour:
   playerInputManager: {fileID: 0}
   lives: 0
   gameSetup: {fileID: 11400000, guid: 30588d5ff68d1864bbf182d8f451ecb9, type: 2}
+--- !u!114 &6938327446870327369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480315072341989922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54352a87a6a4fe140ab4882e7e121a55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootAtPlayerRange: 5
+  bulletDetectRange: 5
+  chanceToLaunchSelf: 100
+  firePressed: 0
+  shootGrapplePressed: 0
+  aimGun: {x: 0, y: 0}
+  aimGrapple: {x: 0, y: 0}
 --- !u!1 &6590194082773063853
 GameObject:
   m_ObjectHideFlags: 0
