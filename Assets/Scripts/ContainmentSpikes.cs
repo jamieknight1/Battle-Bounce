@@ -12,9 +12,28 @@ public class ContainmentSpikes : MonoBehaviour
     [SerializeField] float damage;
     [SerializeField] float knockbackForce;
 
+    private List<GameObject> players = new List<GameObject>();
+    private int playerCount;
+
     void Awake()
     {
         startPos = transform.position;
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            players.Add(player);
+        }
+
+        playerCount = players.Count;
+    }
+
+    void OnEnable()
+    {
+        Health.LostLife += ResetSpikes;
+    }
+
+    void OnDisable()
+    {
+        Health.LostLife -= ResetSpikes;
     }
 
     void Update()
@@ -38,5 +57,10 @@ public class ContainmentSpikes : MonoBehaviour
             Vector2 knockbackDir = other.transform.position - transform.position;
             playerRb.AddForce(knockbackDir * knockbackForce);
         }
+    }
+
+    private void ResetSpikes()
+    {
+        playerDead = true;
     }
 }

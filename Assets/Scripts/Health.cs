@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEditor;
+using System;
 
 public class Health : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class Health : MonoBehaviour
     public int lives;
     [SerializeField] GameSetup gameSetup;
     GameManagement gameManagement;
+
+    public static event Action LostLife; 
 
 
     // Start is called before the first frame update
@@ -51,12 +54,14 @@ public class Health : MonoBehaviour
             lives -= 1;
             gameManagement.PlayerDeath(gameObject);
             Destroy(gameObject);
+            LostLife?.Invoke();
         }
 
         else if (currentHealth <= 0 && lives > 1)
         {
             currentHealth = maxHealth;
             lives -= 1;
+            LostLife?.Invoke();
         }
     }
 
