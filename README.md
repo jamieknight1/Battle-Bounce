@@ -14,14 +14,13 @@ Battle Bounce is a physics-based 2D action fighting game where relies on gun kno
 - Time limits
 - 4 unique characters
 - All art assets
-
-## Planned Features
 - Enemy AI
 - Interactive stage hazards
+
+## Planned Features
 - Enhanced visual effects and polish
 - Music
 - SFX
-- Character selection screen
 
 ## How to Play/Run
 - Open the project in Unity 2022.3.4f1 or later
