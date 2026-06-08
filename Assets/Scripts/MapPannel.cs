@@ -10,13 +10,7 @@ public class MapPannel : MonoBehaviour
     [SerializeField] Image pannelImage;
     [SerializeField] TMP_Text pannelTitleText;
     [SerializeField] TMP_Text pannelDescriptionText;
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
+    
     void Update()
     {
         Debug.Log(EventSystem.current.currentSelectedGameObject);
@@ -33,7 +27,7 @@ public class MapPannel : MonoBehaviour
     {
         CursorButtonSelection buttonScript = EventSystem.current.currentSelectedGameObject.GetComponent<CursorButtonSelection>();
 
-        pannelTitleText.text = buttonScript.scene.TrimStart('M', 'a', 'p', '_');
+        pannelTitleText.text = buttonScript.scene.Substring(4);
 
         pannelDescriptionText.text = buttonScript.mapDescription;
     }
