@@ -13,7 +13,6 @@ public class MapPannel : MonoBehaviour
     
     void Update()
     {
-        Debug.Log(EventSystem.current.currentSelectedGameObject);
         UpdateImage();
         UpdateText();
     }

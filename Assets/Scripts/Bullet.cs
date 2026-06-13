@@ -38,13 +38,11 @@ public class Bullet : MonoBehaviour
         else if (other.gameObject.tag == "Player")
         {
             Knockback();
-            SpawnParticle(onCollisionParticle);
             Destroy(gameObject);
         }
         else
         {
             Knockback();
-            SpawnParticle(onCollisionParticle);
             Destroy(gameObject);
         }
     }
@@ -73,5 +71,10 @@ public class Bullet : MonoBehaviour
         {
             Instantiate(particle, transform.position, Quaternion.identity);
         }
+    }
+
+    private void OnDestroy()
+    {
+        SpawnParticle(onCollisionParticle);
     }
 }

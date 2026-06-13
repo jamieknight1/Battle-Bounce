@@ -16,6 +16,7 @@ public class EruptionEvent : MonoBehaviour
     [SerializeField] int numberOfRocksToSpawn;
     [SerializeField] float minRockScale;
     [SerializeField] float maxRockScale;
+    [SerializeField] GameObject ground;
 
     [SerializeField] float shakeSpeed;
     [SerializeField] float shakeAmount;
@@ -63,6 +64,7 @@ public class EruptionEvent : MonoBehaviour
         for (int i = 0; i < numberOfRocksToSpawn; i++)
         {
             GameObject newRock = Instantiate(lavaRock, new Vector3(Random.Range(-7.5f, 7.5f), 10f), Quaternion.Euler(0 , 0, Random.Range(0f, 360f)));
+            newRock.GetComponent<LavaRock>().SetGround(ground); 
             newRock.transform.localScale += new Vector3(Random.Range(minRockScale, maxRockScale), Random.Range(minRockScale, maxRockScale), Random.Range(minRockScale, maxRockScale));
             yield return new WaitForSeconds(1);
         }
