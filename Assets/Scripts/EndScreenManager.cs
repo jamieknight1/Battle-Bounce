@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EndScreenManager : MonoBehaviour
 {
@@ -14,10 +15,13 @@ public class EndScreenManager : MonoBehaviour
     float elapsedTime;
     [SerializeField] float duration = 0.5f;
 
+    [SerializeField] Image backgroundImage;
+
     void Awake()
     {
         text.text = "Player " + gameSetup.winningPlayerNumber.ToString() + " Wins!";
         EndCards();
+        SetBackground();
     }
 
     void EndCards()
@@ -25,7 +29,6 @@ public class EndScreenManager : MonoBehaviour
         for (int i = 0; i < gameSetup.playerRankings.Count; i++)
         {
             endCardsPos.Add(endCards[gameSetup.playerRankings[i]], (endCards[gameSetup.playerRankings[i]].localPosition, new Vector2(endCards[gameSetup.playerRankings[i]].localPosition.x, -3f * i / (gameSetup.playerRankings.Count - 1f))));
-            Debug.Log("Index: " + i.ToString() + " Player Count: " + gameSetup.playerRankings.Count.ToString());
         }
 
         for (int i = 3; i > gameSetup.playerRankings.Count - 1; i--)
@@ -42,5 +45,10 @@ public class EndScreenManager : MonoBehaviour
         {
             card.Key.localPosition = Vector2.Lerp(card.Value.startPos, card.Value.endPos, elapsedTime / duration);
         }
+    }
+
+    void SetBackground()
+    {
+        backgroundImage.sprite = gameSetup.mapImage;
     }
 }

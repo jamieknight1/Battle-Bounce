@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
 
-    public AudioManager instance;
+    public static AudioManager instance;
 
     void Awake()
     {
@@ -29,7 +29,13 @@ public class AudioManager : MonoBehaviour
             sound.source.volume = sound.volume;
             sound.source.pitch = sound.pitch;
             sound.source.loop = sound.loop;
+            sound.source.playOnAwake = false;
         }
+    }
+
+    void Start()
+    {
+        PlayAfter("Title Screen Intro", "Title Screen Main");
     }
 
     public void Play(string name)
@@ -41,5 +47,33 @@ public class AudioManager : MonoBehaviour
             return;
         }
         sound.source.Play();
+    }
+
+    public void PlayAfter(string firstSoundName, string secondSoundName)
+    {
+        Sound firstSound = Array.Find(sounds, sound => sound.name == firstSoundName);
+        if (firstSound == null)
+        {
+            Debug.Log($"Sound {name} not found!");
+        }
+
+        Sound secondSound = Array.Find(sounds, sound => sound.name == secondSoundName);
+        if (secondSound == null)
+        {
+            Debug.Log($"Sound {name} not found!");
+        }
+        
+        double startTime = AudioSettings.dspTime + 1;
+        double firstSoundLength = (double)firstSound.clip.samples/firstSound.clip.frequency;
+        firstSound.source.PlayScheduled(startTime);
+        secondSound.source.PlayScheduled(startTime + firstSoundLength);
+    }
+
+    public void StopAll()
+    {
+        foreach (var sound in sounds)
+        {
+            sound.source.Stop();
+        }
     }
 }

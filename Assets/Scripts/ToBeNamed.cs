@@ -107,6 +107,8 @@ public class ToBeNamed : MonoBehaviour
             teleportGrapplePressed = player.FindAction("TeleportGrapple").ReadValue<float>() > 0f;
             aimGrapple = player.FindAction("MoveGrapple").ReadValue<Vector2>();
             aimGun = player.FindAction("MoveGun").ReadValue<Vector2>();
+
+            GetComponent<EnemyAI>().enabled = false;
         }
 
         else if (healthScript.cpu)

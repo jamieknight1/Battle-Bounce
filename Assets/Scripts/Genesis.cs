@@ -65,7 +65,7 @@ public class Genesis : MonoBehaviour
     {
         playerInputManager = FindObjectOfType<PlayerInputManager>();
         playerNumber = playerInputManager.playerCount.ToString();
-        inputAsset = this.GetComponent<PlayerInput>().actions;
+        inputAsset = GetComponent<PlayerInput>().actions;
         player = inputAsset.FindActionMap("PlayerMovement");
         playerControls = new PlayerControls();
 
@@ -74,7 +74,7 @@ public class Genesis : MonoBehaviour
 
         eyeAnimator = pupil.GetComponent<Animator>();
 
-        gameManagement = GameObject.FindObjectOfType<GameManagement>();
+        gameManagement = FindObjectOfType<GameManagement>();
     }
 
     private void Start()
@@ -112,6 +112,8 @@ public class Genesis : MonoBehaviour
             shootGrapplePressed = player.FindAction("Grapple").ReadValue<float>() > 0f;
             aimGrapple = player.FindAction("MoveGrapple").ReadValue<Vector2>();
             aimGun = player.FindAction("MoveGun").ReadValue<Vector2>();
+
+            GetComponent<GenesisAI>().enabled = false;
         }
 
         else if (healthScript.cpu)

@@ -114,6 +114,8 @@ public class FireGuy : MonoBehaviour
             firePressed = player.FindAction("Fire").ReadValue<float>() > 0f;
             shootGrapplePressed = player.FindAction("Grapple").ReadValue<float>() > 0f;
             aimGun = player.FindAction("MoveGun").ReadValue<Vector2>();
+
+            GetComponent<InferknightAI>().enabled = false;
         }
 
         else if (healthScript.cpu)

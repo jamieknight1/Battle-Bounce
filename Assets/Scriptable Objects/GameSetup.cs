@@ -20,6 +20,7 @@ public class GameSetup : ScriptableObject
     public int winningPlayerNumber;
 
     public string map;
+    public Sprite mapImage;
     public List<int> playerRankings;
 
     public void SetupVars()

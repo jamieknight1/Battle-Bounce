@@ -15,7 +15,7 @@ public class Health : MonoBehaviour
     GameObject healthBar;
     HealthBar healthBarScript;
     RectTransform healthBarTransform;
-    string playerNumber;
+    public string playerNumber;
     public PlayerInputManager playerInputManager;
     public int lives;
     [SerializeField] GameSetup gameSetup;
@@ -41,6 +41,7 @@ public class Health : MonoBehaviour
             healthBarTransform = healthBar.GetComponent<RectTransform>();
             currentHealth = maxHealth;
             healthBarScript.SetMaxHealth(maxHealth);
+            healthBarScript.SetImage(GetComponent<SpriteRenderer>().sprite);
             healthBarTransform.localPosition = GameObject.Find("P" + playerNumber.ToString() + " Health Bar Spawn").GetComponent<RectTransform>().localPosition;
         }
     }

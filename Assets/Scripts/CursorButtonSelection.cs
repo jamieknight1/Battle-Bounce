@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CursorButtonSelection : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class CursorButtonSelection : MonoBehaviour
     public void OnClick()
     {
         gameSetup.map = scene;
-        //selectionScreenInputManager.selectedScene = scene;
+        gameSetup.mapImage = GetComponent<Image>().sprite;
         SceneManager.LoadScene("CharacterSelect");
     }
 }

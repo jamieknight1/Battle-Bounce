@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game Setup Screen.unity
     guid: ea4217c02d26f584da28183de904fa73
+  - enabled: 1
+    path: Assets/Scenes/Maps/Map_Eruption.unity
+    guid: b849c72da3349c645b643b76486b1ed7
   m_configObjects: {}

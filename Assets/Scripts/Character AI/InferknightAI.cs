@@ -76,10 +76,6 @@ public class InferknightAI : MonoBehaviour
         //     }
         // }
 
-        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
-
-        activePlayers.RemoveAll(player => player == null);
-
         //Finding the closest bullet
         if (activeNearbyBullets.Count > 0)
         {
@@ -131,6 +127,10 @@ public class InferknightAI : MonoBehaviour
                 else if (randomChance == 2) { ShootAt(wallToShootAt); }
             }
         }
+
+        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
+
+        activePlayers.RemoveAll(player => player == null);
     }
 
     void OnCollisionStay2D(Collision2D collision)

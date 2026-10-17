@@ -678,13 +678,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 459005942262189407, guid: fded6b31c357309438f39db274638d40, type: 3}
+      propertyPath: mapName
+      value: Eruption
+      objectReference: {fileID: 0}
     - target: {fileID: 3486652430070737211, guid: fded6b31c357309438f39db274638d40, type: 3}
       propertyPath: m_Name
       value: Level Setup
       objectReference: {fileID: 0}
     - target: {fileID: 3486652430070737211, guid: fded6b31c357309438f39db274638d40, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6304725271811895052, guid: fded6b31c357309438f39db274638d40, type: 3}
       propertyPath: m_RootOrder

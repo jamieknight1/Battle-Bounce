@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e1afb6994af68d43b0e9533b4177547, type: 3}
   m_Name: GameSetup
   m_EditorClassIdentifier: 
-  playerLives: 3
-  rulesetTime: 5
+  playerLives: 1
+  rulesetTime: 0
   rulesetGamemode: 0
-  time: 600
+  time: 60
   gamemode: Life
   seconds:
   - 60
@@ -28,6 +28,6 @@ MonoBehaviour:
   rulesets:
   - Life
   - Deal Damage
-  winningPlayerNumber: 1
-  map: Map_Test
-  playerRankings: 00000000ffffffff
+  winningPlayerNumber: 2
+  map: Map_Landing Site
+  playerRankings: 0000000000000000

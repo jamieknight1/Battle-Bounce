@@ -397,8 +397,9 @@ MonoBehaviour:
   gasCloudBullet: {fileID: 6937356841067055690, guid: e239ea8f0fdbb1b4094f2dfcd9312cc8, type: 3}
   sludgeBombBullet: {fileID: 6937356841067055690, guid: acb507627c159a542999e779af63c774, type: 3}
   fireRate: 1
+  nextTimeToFire: 0
   gameManagement: {fileID: 0}
-  healthScript: {fileID: 0}
+  healthScript: {fileID: -165588441614084883}
   firePressed: 0
   shootGrapplePressed: 0
   aimGun: {x: 0, y: 0}

@@ -18,7 +18,7 @@ public class GreenGuy : MonoBehaviour
     public PlayerInputManager playerInputManager;
 
     [SerializeField] LayerMask grapplableMask;
-    [SerializeField] float maxDistance = 10f;
+    [SerializeField] public float maxDistance = 10f;
     [SerializeField] float grappleSpeed = 10f;
     [SerializeField] float grappleShootSpeed = 20f;
     [SerializeField] Rigidbody2D playerRb;
@@ -37,7 +37,7 @@ public class GreenGuy : MonoBehaviour
     public GameObject gasCloudBullet;
     public GameObject sludgeBombBullet;
     public float fireRate = 1f;
-    float nextTimeToFire = 0f;
+    public float nextTimeToFire = 0f;
 
     [SerializeField] GameManagement gameManagement;
 
@@ -90,6 +90,8 @@ public class GreenGuy : MonoBehaviour
             shootGrapplePressed = player.FindAction("Grapple").ReadValue<float>() > 0f;
             aimGrapple = player.FindAction("MoveGrapple").ReadValue<Vector2>();
             aimGun = player.FindAction("MoveGun").ReadValue<Vector2>();
+
+            GetComponent<ToxicideAI>().enabled = false;
         }
 
         else if (healthScript.cpu)

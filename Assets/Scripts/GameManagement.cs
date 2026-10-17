@@ -64,11 +64,6 @@ public class GameManagement : MonoBehaviour
         yield return null;
         playerManager = PlayerManager.Instance;
         SpawnPlayers();
-
-        foreach (var player in playerManager.GetPlayers())
-        {
-            Debug.Log(player.Character.name);
-        }
     }
 
     void Update()
@@ -106,7 +101,6 @@ public class GameManagement : MonoBehaviour
             if (playerData.PlayerType == PlayerType.Human)
             {
                 InputDevice device = InputSystem.devices.FirstOrDefault(d => d.deviceId == playerData.DeviceId);
-                Debug.Log("player human");
                 var newPlayer = PlayerInput.Instantiate(playerData.Character, pairWithDevice: device);
                 newPlayer.transform.position = playerSpawns[i].position;
             }
@@ -192,7 +186,7 @@ public class GameManagement : MonoBehaviour
 
     public void PlayerDeath(GameObject player)
     {
-        deadPlayers.Add(player.GetComponent<PlayerInput>().playerIndex);
+        deadPlayers.Add(int.Parse(player.GetComponent<Health>().playerNumber));
     }
 
     public void ButtonPause()

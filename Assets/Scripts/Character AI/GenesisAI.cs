@@ -89,10 +89,6 @@ public class GenesisAI : MonoBehaviour
         //     }
         // }
 
-        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
-
-        activePlayers.RemoveAll(player => player == null);
-
         //Finding the closest bullet
         if (activeNearbyBullets.Count > 0)
         {
@@ -126,6 +122,10 @@ public class GenesisAI : MonoBehaviour
 
         // If player is far away, shoot at them
         else if (Vector2.Distance(transform.position, closestPlayer.transform.position) > shootAtPlayerRange && Time.time >= playerScript.nextTimeToFire) { ShootAt(closestPlayer.transform.position); }
+   
+        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
+
+        activePlayers.RemoveAll(player => player == null);
     }
 
     void OnCollisionStay2D(Collision2D collision)

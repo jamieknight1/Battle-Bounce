@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ToxicideAI : MonoBehaviour
 {
-    private FireGuy playerScript;
+    private GreenGuy playerScript;
     [SerializeField] private float shootAtPlayerRange;
     [SerializeField] private float bulletDetectRange;
 
@@ -22,7 +22,7 @@ public class ToxicideAI : MonoBehaviour
 
     void Awake()
     {
-        playerScript = GetComponent<FireGuy>();
+        playerScript = GetComponent<GreenGuy>();
 
         foreach (GameObject activePlayer in GameObject.FindGameObjectsWithTag("Player"))
         {
@@ -67,10 +67,6 @@ public class ToxicideAI : MonoBehaviour
                 activeNearbyBullets.Add(bullet);
             }
         }
-
-        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
-
-        activePlayers.RemoveAll(player => player == null);
 
         //Finding the closest bullet
         if (activeNearbyBullets.Count > 0)
@@ -123,6 +119,10 @@ public class ToxicideAI : MonoBehaviour
                 else if (randomChance == 2) { ShootAt(wallToShootAt); }
             }
         }
+
+        activeNearbyBullets.RemoveAll(bullet => bullet == null || Vector2.Distance(transform.position, bullet.transform.position) > bulletDetectRange);
+
+        activePlayers.RemoveAll(player => player == null);
     }
 
     void OnCollisionStay2D(Collision2D collision)
